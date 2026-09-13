@@ -1,0 +1,161 @@
+[
+  {
+    "id": "stair-railing",
+    "search": "railings-turnkey-solutions",
+    "candidate": 0,
+    "description": "Stainless steel railing beside outdoor stone steps",
+    "paths": [
+      "/images/products/railings-turnkey-solutions/hero.webp",
+      "/images/products/residential-stainless-steel-railings/hero.webp"
+    ]
+  },
+  {
+    "id": "curved-bench",
+    "search": "stainless-steel-benches",
+    "candidate": 0,
+    "description": "Curved stainless steel bench viewed from above",
+    "paths": ["/images/products/stainless-steel-benches/hero.webp"]
+  },
+  {
+    "id": "pedal-bin",
+    "search": "stainless-steel-dustbins",
+    "candidate": 0,
+    "description": "Cylindrical stainless steel pedal bin with a closed lid",
+    "paths": ["/images/products/stainless-steel-dustbins/hero.webp"]
+  },
+  {
+    "id": "public-bollards",
+    "search": "stainless-steel-bollards",
+    "candidate": 0,
+    "description": "A row of stainless steel bollards in a paved public space",
+    "paths": ["/images/products/stainless-steel-bollards/hero.webp"]
+  },
+  {
+    "id": "cable-tray",
+    "search": "cable-trays",
+    "candidate": 0,
+    "description": "Overhead metal cable tray carrying parallel cable runs",
+    "paths": ["/images/products/cable-trays/hero.webp"]
+  },
+  {
+    "id": "weld-detail",
+    "search": "custom-stainless-steel-fabrication",
+    "candidate": 0,
+    "description": "Close-up of an orbital weld joining stainless steel tube",
+    "paths": [
+      "/images/products/custom-stainless-steel-fabrication/hero.webp",
+      "/images/products/turnkey-project-fabrication/gallery-01.webp"
+    ]
+  },
+  {
+    "id": "steel-grating",
+    "search": "stainless-steel-gratings",
+    "candidate": 4,
+    "description": "Steel grid walkway at Weimarhallenpark; alloy and load rating are not established by this reference",
+    "paths": ["/images/products/stainless-steel-gratings/hero.webp"]
+  },
+  {
+    "id": "wall-art-india",
+    "search": "metal-wall-art",
+    "candidate": 3,
+    "description": "Decorative metal wall hangings displayed at a shop in India",
+    "paths": ["/images/products/metal-wall-art/hero.webp"]
+  },
+  {
+    "id": "bridge-expansion-joint",
+    "search": "expansion-joints",
+    "candidate": 0,
+    "description": "Expansion joint crossing the pedestrian pavement at Umi-gawa Bridge, Fukuoka",
+    "paths": ["/images/products/expansion-joints/hero.webp"]
+  },
+  {
+    "id": "bridge-joint-west",
+    "search": "expansion-joints",
+    "candidate": 1,
+    "description": "Pedestrian-side expansion joint at the west end of Umi-gawa Bridge",
+    "paths": ["/images/products/expansion-joints/application-01.webp"]
+  },
+  {
+    "id": "seafront-railing",
+    "search": "railings-turnkey-solutions",
+    "candidate": 1,
+    "description": "Stainless steel railings beside Teignmouth pier",
+    "paths": [
+      "/images/products/railings-turnkey-solutions/application-01.webp",
+      "/images/products/residential-stainless-steel-railings/application-01.webp"
+    ]
+  },
+  {
+    "id": "bicycle-stands-belfast",
+    "search": "bicycle-closeup",
+    "candidate": 4,
+    "description": "Two loop-shaped metal bicycle stands on a pavement in Belfast",
+    "paths": ["/images/products/stainless-steel-bicycle-stands/hero.webp"]
+  },
+  {
+    "id": "bus-shelter-bethlehem",
+    "search": "stainless-steel-bus-shelters",
+    "candidate": 0,
+    "description": "A metal-framed roadside bus shelter in Bethlehem, Pennsylvania; reference for shelter form, not alloy specification",
+    "paths": ["/images/products/stainless-steel-bus-shelters/hero.webp"]
+  },
+  {
+    "id": "furniture-bancroft",
+    "search": "stainless-furniture",
+    "candidate": 5,
+    "description": "Stainless steel outdoor seating at Bancroft Gardens",
+    "paths": [
+      "/images/products/stainless-steel-design-furniture/hero.webp",
+      "/images/products/stainless-steel-benches/application-01.webp"
+    ]
+  },
+  {
+    "id": "stainless-service-doors",
+    "search": "stainless-door",
+    "candidate": 1,
+    "description": "Stainless steel service doors and frames at Ho Man Tin station; no fire or security rating implied",
+    "paths": ["/images/products/stainless-steel-safety-doors-frames/hero.webp"]
+  },
+  {
+    "id": "kings-cross-cladding",
+    "search": "stainless-steel-cladding",
+    "candidate": 0,
+    "description": "Stainless steel facade cladding on King's Cross Road, London",
+    "paths": [
+      "/images/products/stainless-steel-cladding/hero.webp",
+      "/images/products/stainless-steel-facades/hero.webp"
+    ]
+  },
+  {
+    "id": "entrance-canopy",
+    "search": "stainless-steel-canopies",
+    "candidate": 1,
+    "description": "Curved metal-and-glass entrance canopy at Alte Sparkasse, Dulmen; reference for canopy form",
+    "paths": ["/images/products/stainless-steel-canopies/hero.webp"]
+  },
+  {
+    "id": "pergola-deggendorf",
+    "search": "stainless-steel-pergolas",
+    "candidate": 1,
+    "description": "Metal-post pergola with climbing plants and seating in Deggendorf; alloy is not established by the photograph",
+    "paths": ["/images/products/stainless-steel-pergolas/hero.webp"]
+  },
+  {
+    "id": "waterjet-cutting",
+    "search": "waterjet-detail",
+    "candidate": 4,
+    "description": "Five-axis waterjet cutting head working on a sheet; general process reference",
+    "paths": [
+      "/images/products/waterjet-cut-steel-designs/hero.webp",
+      "/images/products/custom-stainless-steel-fabrication/gallery-01.webp",
+      "/images/products/turnkey-project-fabrication/hero.webp"
+    ]
+  },
+  {
+    "id": "garden-sculpture",
+    "search": "custom-metal-arts-sculptures",
+    "candidate": 0,
+    "description": "Stainless steel garden sculpture at Gibberd Garden, Harlow, England",
+    "paths": ["/images/products/custom-metal-arts-sculptures/hero.webp"]
+  }
+]

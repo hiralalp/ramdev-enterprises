@@ -1,0 +1,51 @@
+export type ProductSpecification = { label: string; value: string };
+export type ProductFaq = { question: string; answer: string };
+export type Product = {
+  slug: string;
+  name: string;
+  shortDescription: string;
+  category: string;
+  secondaryCategories?: string[];
+  approved: boolean;
+  featured?: boolean;
+  seoTitle: string;
+  metaDescription: string;
+  intro: string;
+  howToSpecify: string[];
+  faqs: ProductFaq[];
+  image?: string;
+  features: string[];
+  applications: string[];
+  specifications: ProductSpecification[];
+  gallery?: string[];
+  relatedSlugs: string[];
+  sourcePage?: string;
+  banner?: string;
+  galleryImages?: { src: string; width: number; height: number }[];
+};
+export type Industry = {
+  slug: string;
+  name: string;
+  description: string;
+  challenges: string[];
+  applications: string[];
+  productSlugs: string[];
+  image?: string;
+};
+export type Project = {
+  slug: string;
+  name: string;
+  description: string;
+  application: string;
+  image?: string;
+  gallery?: string[];
+};
+export type Insight = {
+  slug: string;
+  title: string;
+  category: string;
+  description: string;
+  readingTime: string;
+  sections: { title: string; body: string }[];
+  image?: string;
+};
