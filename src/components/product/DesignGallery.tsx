@@ -13,10 +13,12 @@ export function DesignGallery({
   name,
   slug,
   images,
+  sourceLabel = "Supplied reference catalogue.",
 }: {
   name: string;
   slug: string;
   images: { src: string; width: number; height: number }[];
+  sourceLabel?: string;
 }) {
   const [shown, setShown] = useState(24);
   const [index, setIndex] = useState(-1);
@@ -89,8 +91,7 @@ export function DesignGallery({
           ...image,
           alt: `${name} design ${number(position)}`,
           title: `${name} / Design ${number(position)}`,
-          description:
-            "Supplied reference catalogue. Confirm material, finish and scope on enquiry.",
+          description: `${sourceLabel} Confirm material, finish and scope on enquiry.`,
         }))}
         toolbar={{
           buttons: [
