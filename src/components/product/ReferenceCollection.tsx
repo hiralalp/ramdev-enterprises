@@ -14,6 +14,9 @@ import {
   ProductFaq,
   RelatedProducts,
   ProductContactBand,
+  FeatureGrid,
+  ApplicationGrid,
+  HowToSpecify,
 } from "./ProductDetails";
 
 export function CollectionBanner({ product }: { product: Product }) {
@@ -41,7 +44,9 @@ export function CollectionBanner({ product }: { product: Product }) {
           </p>
           <h1>{product.name}</h1>
           <p>
-            A collection of forms, finishes and details for your next space.
+            {product.sourceFolder
+              ? product.shortDescription
+              : "A collection of forms, finishes and details for your next space."}
           </p>
           <div className="button-row">
             <a className="button" href="#collection">
@@ -82,7 +87,9 @@ export function ReferenceCollection({ product }: { product: Product }) {
               <h2>Discover the details.</h2>
             </div>
             <p>
-              Images from the supplied Ramdev Steel Industries catalogue.
+              {product.sourceFolder
+                ? "Owner-supplied product reference images. "
+                : "Images from the supplied Ramdev Steel Industries catalogue. "}
               Materials, finishes and availability require confirmation.
             </p>
           </div>
@@ -90,6 +97,11 @@ export function ReferenceCollection({ product }: { product: Product }) {
             name={product.name}
             slug={product.slug}
             images={product.galleryImages!}
+            sourceLabel={
+              product.sourceFolder
+                ? "Owner-supplied product reference images."
+                : undefined
+            }
           />
         </Container>
       </section>
@@ -137,6 +149,13 @@ export function ReferenceCollection({ product }: { product: Product }) {
           <ProductFaq product={product} />
         </Container>
       </section>
+      {product.sourceFolder && (
+        <>
+          <FeatureGrid product={product} />
+          <ApplicationGrid product={product} />
+          <HowToSpecify product={product} />
+        </>
+      )}
       <RelatedProducts slugs={product.relatedSlugs} />
       <ProductContactBand />
     </div>

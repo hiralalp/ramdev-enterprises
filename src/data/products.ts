@@ -1,4 +1,6 @@
 import type { Product, ProductFaq, ProductSpecification } from "@/types";
+import { referenceProducts, referenceCategories } from "./reference-products";
+import suppliedPhotos from "./supplied-product-photos.json";
 
 export const legacyCatalogueCategories = [
   "Steel Products",
@@ -1334,4 +1336,45 @@ export const legacyProducts: Product[] = [
   }),
 ];
 
-export { referenceProducts as products, referenceCategories as catalogueCategories, referenceCategories as productCategories } from "./reference-products";
+export const suppliedProducts: Product[] = suppliedPhotos.map((collection) => {
+  const original = legacyProducts.find(
+    (product) => product.slug === collection.slug,
+  );
+  if (!original) throw new Error(`Missing product brief: ${collection.slug}`);
+  return {
+    ...original,
+    category:
+      collection.slug === "stainless-steel-planters"
+        ? "Decorative & Accessories"
+        : "Stainless Steel",
+    secondaryCategories: undefined,
+    sourceFolder: collection.folder,
+    image: collection.images[0].src,
+    gallery: collection.images.map((image) => image.src),
+    galleryImages: collection.images.map(({ src, width, height }) => ({
+      src,
+      width,
+      height,
+    })),
+    relatedSlugs: [...original.relatedSlugs],
+  };
+});
+export const products: Product[] = [...referenceProducts, ...suppliedProducts];
+for (const product of suppliedProducts) {
+  product.relatedSlugs = [
+    ...new Set([
+      ...product.relatedSlugs.filter((slug) =>
+        products.some((other) => other.slug === slug),
+      ),
+      ...products
+        .filter((other) => other.category === product.category)
+        .map((other) => other.slug),
+    ]),
+  ]
+    .filter((slug) => slug !== product.slug)
+    .slice(0, 3);
+}
+export {
+  referenceCategories as catalogueCategories,
+  referenceCategories as productCategories,
+};

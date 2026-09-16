@@ -20,6 +20,7 @@ export type Product = {
   gallery?: string[];
   relatedSlugs: string[];
   sourcePage?: string;
+  sourceFolder?: string;
   banner?: string;
   galleryImages?: { src: string; width: number; height: number }[];
 };

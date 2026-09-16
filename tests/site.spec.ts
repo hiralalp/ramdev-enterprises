@@ -608,7 +608,9 @@ test("reference photographs load locally with credits and responsive captions", 
       ),
     ).toBeGreaterThan(0);
     await expect(page.locator(".collection-heading")).toContainText(
-      "supplied Ramdev Steel Industries catalogue",
+      product.sourceFolder
+        ? "Owner-supplied product reference images"
+        : "supplied Ramdev Steel Industries catalogue",
     );
     for (const width of [375, 768, 1440]) {
       await page.setViewportSize({ width, height: 900 });
@@ -650,6 +652,96 @@ test("reference photographs load locally with credits and responsive captions", 
     await expect(page.locator(`#${photo.id}`)).toContainText(photo.author);
     for (const asset of photo.paths)
       expect((await request.get(asset)).status()).toBe(200);
+  }
+});
+
+test("owner-supplied product pages expose all gallery images and complete enquiry flows", async ({
+  page,
+}) => {
+  test.skip(
+    !preview,
+    "Owner-supplied collections remain draft until approved.",
+  );
+  test.setTimeout(300000);
+  for (const product of products.filter((item) => item.sourceFolder)) {
+    await page.goto("/products");
+    await page.getByRole("searchbox").fill(product.name);
+    await page
+      .locator(`[data-product-slug="${product.slug}"]`)
+      .getByRole("link")
+      .click();
+    await expect(page).toHaveURL(`/products/${product.slug}`);
+    await expect(page).toHaveTitle(product.seoTitle);
+    await expect(page.locator("h1")).toHaveText(product.name);
+    await expect(page.locator(".collection-heading")).toContainText(
+      "Owner-supplied product reference images",
+    );
+    await expect(page.locator(".product-feature-grid li")).toHaveCount(
+      product.features.length,
+    );
+    await expect(page.locator(".product-application-grid li")).toHaveCount(
+      product.applications.length,
+    );
+    await expect(page.locator(".product-specify-list li")).toHaveCount(
+      product.howToSpecify.length,
+    );
+    while (
+      await page
+        .getByRole("button", { name: "More designs", exact: true })
+        .count()
+    ) {
+      await page
+        .getByRole("button", { name: "More designs", exact: true })
+        .click();
+    }
+    await expect(page.locator(".design-tile")).toHaveCount(
+      product.galleryImages!.length,
+    );
+    for (const image of await page
+      .locator(".design-image img, .collection-banner > img")
+      .all()) {
+      await image.scrollIntoViewIfNeeded();
+      await image.evaluate((element) => (element as HTMLImageElement).decode());
+    }
+    for (const width of [1440, 375]) {
+      await page.setViewportSize({ width, height: 900 });
+      expect(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth,
+        ),
+      ).toBe(true);
+      expect(
+        (
+          await new AxeBuilder({ page })
+            .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
+            .analyze()
+        ).violations,
+      ).toEqual([]);
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.screenshot({
+        path: `test-results/supplied-${product.slug}-${width}.png`,
+        animations: "disabled",
+      });
+      await page.locator("#collection").scrollIntoViewIfNeeded();
+      await page.screenshot({
+        path: `test-results/supplied-gallery-${product.slug}-${width}.png`,
+        animations: "disabled",
+      });
+    }
+    await page.locator(".design-image").last().click();
+    await expect(page.locator(".lightbox-quote")).toHaveAttribute(
+      "href",
+      `/request-quote?product=${product.slug}&design=${product.galleryImages!.length}`,
+    );
+    await page.locator(".lightbox-quote").click();
+    await expect(page.getByLabel("Product / requirement")).toHaveValue(
+      product.name,
+    );
+    await expect(page.getByLabel("Requirement details")).toHaveValue(
+      new RegExp(
+        `Design reference: ${String(product.galleryImages!.length).padStart(3, "0")}`,
+      ),
+    );
   }
 });
 

@@ -1,6 +1,6 @@
 # Ramdev Enterprises
 
-A responsive, requirement-led B2B website built from the supplied specifications. The active catalogue contains 41 design collections in five groups, reorganized from the supplied local Ramdev Steel Industries website. All remain unapproved until owner review. The original 27 proposed products are retained as legacy data. No clients, certifications, case studies, technical ratings or company history have been invented.
+A responsive, requirement-led B2B website built from the supplied specifications. The active catalogue contains 52 collections in five groups: 41 from the supplied local Ramdev Steel Industries website and 11 backed by owner-supplied product photo folders. All remain unapproved until owner review. The original 27 proposed products are retained as legacy data. No clients, certifications, case studies, technical ratings or company history have been invented.
 
 ## Stack
 
@@ -39,7 +39,8 @@ Without both mail settings, valid submissions receive HTTP 503 with an honest un
 - `src/data/company.ts`: verified contact information. PAN is never rendered publicly. The supplied phone is incomplete; no call or WhatsApp link is generated.
 - `src/data/reference-products.ts`: active 41 collections, category and canonical route mapping, specifications, FAQs and approval list.
 - `src/data/reference-catalogue.json`: generated source-page, banner and gallery-image mapping with intrinsic dimensions.
-- `src/data/products.ts`: retained 27 legacy briefs; re-exports the active catalogue. Unmatched legacy URLs remain accessible in local draft preview.
+- `src/data/products.ts`: retained 27 legacy briefs; combines the reference collections and 11 photo-backed products into the active catalogue. Unmatched legacy URLs remain accessible in local draft preview.
+- `src/data/supplied-product-photos.json`: generated mapping of 11 product folders and all 172 supplied images, with dimensions and checksums.
 - `src/data/industries.ts`: application areas, not customer claims.
 - `src/data/projects.ts`: intentionally empty until case studies are approved.
 - `src/data/insights.ts`: original general procurement guides.
@@ -60,7 +61,7 @@ $env:NEXT_PUBLIC_SITE_URL = 'http://127.0.0.1:3001'
 npm run dev -- --hostname 127.0.0.1 --port 3001
 ```
 
-After the owner confirms a collection, review its name, availability, scope, technical copy, FAQs and image publication rights; add its canonical slug to `approvedCollectionSlugs` in `src/data/reference-products.ts`, then rebuild and redeploy. Approval is per collection, not per category. Remove its slug and rebuild to withdraw it. Never enable approval merely to populate a page. Legacy briefs keep their independent `approved` flag and are not promoted into the active index.
+After the owner confirms a reference-site collection, review its name, availability, scope, technical copy, FAQs and image publication rights; add its canonical slug to `approvedCollectionSlugs` in `src/data/reference-products.ts`, then rebuild and redeploy. For one of the 11 photo-backed products, set `approved: true` in its original `proposedProduct` brief in `src/data/products.ts`; its active entry inherits that flag. Approval is per product, not per category. Remove approval and rebuild to withdraw it. Never enable approval merely to populate a page.
 
 The listing, filters, navigation, detail route and sitemap derive from the active catalogue. Collections use photographic banners, image-led cards, a gallery displayed in batches of 24, and a full-screen viewer with zoom, thumbnails and keyboard navigation through Yet Another React Lightbox. Design-specific enquiry links validate the image number server-side and prefill the collection, reference number and image path. Specification guidance, FAQs and related collections follow the gallery. Legacy detail pages retain the original procurement template.
 
@@ -95,6 +96,12 @@ Reimport with `node scripts/import-reference-site.mjs "PATH_TO_LOCAL_VEER_STEEL_
 
 This supplied collection is not asserted to be open-licensed. Some images include other companies' watermarks, including Real Ferro. Confirm publication rights for each image before deployment; do not remove embedded attribution. The public `/image-credits` page distinguishes this source from the separately licensed Commons photos. Copying the source logo does not replace Ramdev Enterprises branding or contact details. Files under `public` can be fetched directly even when draft product pages are hidden; draft approval is not asset access control.
 
+### Owner-Supplied Product Folders
+
+Run `node scripts/map-product-photos.mjs` after updating the supplied `public/images/ss ...` folders. The mapper validates image decoding, records dimensions and SHA-256 hashes, and writes `src/data/supplied-product-photos.json` without changing originals. Folder `ss grattings` intentionally maps to Stainless Steel Gratings. All 172 images are used across 11 gallery pages; the first image in filename order is the card/hero image. Existing product-specific specifications, features, applications, FAQs and specifying guidance are retained. The gallery supports full-screen viewing and selected-image enquiries.
+
+After including related collections, seven specification products still lack dedicated active collections and new photo folders: SS Drywall Stone Cladding Clamps, Turnkey Project Fabrication, Expansion Joints, Custom Stainless Steel Fabrication, Stainless Steel Cladding, Waterjet-Cut Steel Designs, and Custom Metal Arts & Sculptures. Their legacy preview pages remain available.
+
 ### Open-Licensed Reference Photographs
 
 Product photography is sourced from Wikimedia Commons under the individual CC BY, CC BY-SA or CC0 licences recorded in `src/data/photo-credits.json`. Each record preserves the original metadata, creator, source page, download URL, licence URL, description, modifications and local placements. `/image-credits` provides public attribution, original-source links and downloadable website versions. Image licences remain in force independently of the site's copyright notice. Reference captions explicitly distinguish these images from Ramdev work; they do not approve any product, establish technical properties or imply endorsement.
@@ -103,7 +110,7 @@ The local WebP assets require no runtime external image service. Full images are
 
 The research cache `.photo-research/` is excluded from git. `scripts/source-photos.ps1` searches Commons in small cached batches; `scripts/download-review-photos.ps1` downloads specific candidates; `scripts/review-photos.mjs` makes a contact sheet. Human-reviewed selections are in `scripts/photo-selections.json`; `node scripts/import-photos.mjs` imports them from the research cache, refusing to overwrite a different existing image. These research tools are optional and are not required to build or serve the committed assets. On HTTP 429, stop and honour the host's rate limits; do not loop retries or bypass TLS validation.
 
-Specialist images still needed: SS stone-cladding clamps, stainless corner guards, stainless planters, PVD furniture, PVD screens/partitions and stainless swings. Unfilled gallery slots keep the branded fallback. Generic internet images were deliberately not placed in the company infrastructure, logo or completed-project slots. Those require actual Ramdev assets.
+Unfilled legacy gallery slots keep the branded fallback. Generic internet images were deliberately not placed in company infrastructure, logo or completed-project slots. Those require actual Ramdev assets.
 
 ## Tests
 
@@ -115,7 +122,7 @@ Browser tests use installed Google Chrome by default. Set `PLAYWRIGHT_CHANNEL=ms
 
 Browser tests cover the required viewport widths, route metadata, internal links, invalid slugs, menu keyboard behavior, product filtering, RFQ prefilling, client/server validation, honest unconfigured delivery and axe accessibility scans. Tests run against a local Next dev server, or reuse an existing server on port 3000. To test a production build, run `npm run build` and `npm start` first. Set `PLAYWRIGHT_BASE_URL` for another local port. Tests expect mail delivery to be unconfigured; do not run the delivery test against a live production inbox.
 
-The default suite checks approved-only publishing, including all 41 active draft URLs returning 404 and no draft content in client chunks. For a separate local draft-preview server, set `PLAYWRIGHT_BASE_URL` to its URL and `PLAYWRIGHT_DRAFT_PREVIEW=true` when running tests. That mode checks all 41 detail pages, five group filters, design-specific RFQs, gallery pagination, viewer keyboard controls, responsive layouts, accessibility and mobile navigation. `tests/catalogue.spec.ts` verifies all 1,691 image checksums, source gallery dimensions and related links, as well as the retained legacy 27-product specification and fail-closed policy. The preview test switch only selects expectations; it cannot enable draft publishing in a production server.
+The default suite checks approved-only publishing, including all 52 active draft URLs returning 404 and no draft content in client chunks. For a separate local draft-preview server, set `PLAYWRIGHT_BASE_URL` to its URL and `PLAYWRIGHT_DRAFT_PREVIEW=true` when running tests. That mode checks all 52 detail pages, five group filters, design-specific RFQs, gallery pagination, viewer keyboard controls, responsive layouts, accessibility and mobile navigation. The owner-supplied page test checks all 172 new images, all 11 enquiry flows and desktop/mobile accessibility. `tests/catalogue.spec.ts` verifies the 1,691 imported and 172 supplied image checksums, source dimensions and related links, as well as the retained legacy specification and fail-closed policy. The preview test switch only selects expectations; it cannot enable draft publishing in a production server.
 
 ## Deployment
 

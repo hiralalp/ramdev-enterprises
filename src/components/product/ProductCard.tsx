@@ -14,7 +14,7 @@ export function ProductCard({
   if (!product.approved && !showDraftProducts) return null;
   return (
     <article
-      className={`product-card${product.sourcePage ? " collection-card" : ""}`}
+      className={`product-card${product.galleryImages ? " collection-card" : ""}`}
       data-product-slug={product.slug}
     >
       <Link href={`/products/${product.slug}`} className="product-card-link">

@@ -7,7 +7,7 @@ import "./hero-slider.css";
 
 const banners = [
   { file: "mall.jpg", label: "Architectural spaces" },
-  { file: "table1.jpg", label: "Furniture details" },
+  { file: "chair.webp", label: "Furniture details" },
   { file: "gate.jpg", label: "Entrance designs" },
 ];
 

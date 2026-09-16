@@ -39,6 +39,19 @@ export default function ImageCreditsPage() {
         </Container>
       </section>
       <section className="section">
+        <Container>
+          <h2>Owner-supplied product photographs</h2>
+          <p>
+            The bicycle stand, bollard, bus shelter, cable tray, canopy, corner
+            guard, dustbin, facade, grating, pergola and planter collections use
+            images supplied in dedicated product folders. The original files and
+            any embedded marks are preserved. No open licence or ownership of
+            the pictured work is asserted. Confirm image publication rights,
+            material specifications and availability before deployment.
+          </p>
+        </Container>
+      </section>
+      <section className="section">
         <Container className="photo-credit-list">
           <p>
             The separately sourced open-licence photographs below remain

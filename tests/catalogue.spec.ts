@@ -1,12 +1,15 @@
 import { test, expect } from "@playwright/test";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import sharp from "sharp";
 import { photoCredits } from "../src/lib/photo-credits";
 import {
   legacyProducts as products,
   legacyCatalogueCategories as catalogueCategories,
-  products as referenceProducts,
+  products as activeProducts,
+  suppliedProducts,
 } from "../src/data/products";
+import { referenceProducts } from "../src/data/reference-products";
+import suppliedPhotos from "../src/data/supplied-product-photos.json";
 import { createHash } from "node:crypto";
 import referenceCatalogue from "../src/data/reference-catalogue.json";
 import {
@@ -100,6 +103,77 @@ test("imported collections retain valid local images, unique routes and approval
         metadata.width,
         metadata.height,
       ]);
+    }
+  }
+});
+
+test("supplied folders map every photo to the correct complete product page", async () => {
+  expect(activeProducts).toHaveLength(52);
+  expect(new Set(activeProducts.map((product) => product.slug)).size).toBe(52);
+  expect(suppliedProducts).toHaveLength(11);
+  expect(selectVisibleProducts(activeProducts)).toEqual([]);
+  expect(
+    suppliedPhotos.reduce(
+      (total, collection) => total + collection.images.length,
+      0,
+    ),
+  ).toBe(172);
+  const expected = {
+    "ss bicycle stand": "stainless-steel-bicycle-stands",
+    "ss bollards": "stainless-steel-bollards",
+    "ss bus shelter": "stainless-steel-bus-shelters",
+    "ss cable tray": "cable-trays",
+    "ss canopies": "stainless-steel-canopies",
+    "ss corner guards": "stainless-steel-corner-guards",
+    "ss dustbins": "stainless-steel-dustbins",
+    "ss facades": "stainless-steel-facades",
+    "ss grattings": "stainless-steel-gratings",
+    "ss pergolas": "stainless-steel-pergolas",
+    "ss planter": "stainless-steel-planters",
+  };
+  expect(
+    Object.fromEntries(
+      suppliedPhotos.map(({ folder, slug }) => [folder, slug]),
+    ),
+  ).toEqual(expected);
+  for (const collection of suppliedPhotos) {
+    const product = suppliedProducts.find(
+      (item) => item.slug === collection.slug,
+    )!;
+    const original = products.find((item) => item.slug === collection.slug)!;
+    expect(product.sourceFolder).toBe(collection.folder);
+    expect(product.sourcePage).toBeUndefined();
+    expect(product.intro).toBe(original.intro);
+    expect(product.specifications).toEqual(original.specifications);
+    expect(product.features).toEqual(original.features);
+    expect(product.applications).toEqual(original.applications);
+    expect(product.faqs).toEqual(original.faqs);
+    expect(product.howToSpecify).toEqual(original.howToSpecify);
+    expect(product.gallery).toEqual(
+      collection.images.map((image) => image.src),
+    );
+    const files = readdirSync(`public/images/${collection.folder}`, {
+      recursive: true,
+    })
+      .map(String)
+      .filter((file) => /\.(jpe?g|png|webp|avif)$/i.test(file));
+    expect(collection.images).toHaveLength(files.length);
+    for (const image of collection.images) {
+      const bytes = readFileSync(`public${image.src}`);
+      expect(createHash("sha256").update(bytes).digest("hex")).toBe(
+        image.sha256,
+      );
+      expect(bytes.length).toBe(image.bytes);
+      const metadata = await sharp(bytes).metadata();
+      expect([image.width, image.height]).toEqual([
+        metadata.autoOrient?.width || metadata.width,
+        metadata.autoOrient?.height || metadata.height,
+      ]);
+    }
+    expect(product.relatedSlugs).toHaveLength(3);
+    for (const slug of product.relatedSlugs) {
+      expect(slug).not.toBe(product.slug);
+      expect(activeProducts.some((item) => item.slug === slug)).toBe(true);
     }
   }
 });
