@@ -1,5 +1,361 @@
 [
   {
+    "folder": "pre engineered steel plant",
+    "slug": "pre-engineered-steel-plants",
+    "images": [
+      {
+        "src": "/images/pre engineered steel plant/3-11-1024x768.jpg",
+        "width": 1024,
+        "height": 768,
+        "bytes": 184139,
+        "sha256": "34cb1b784ce0ecee522c92e5dce3a5f5238b5802d3b163a0b18b41b8ae5ee905"
+      },
+      {
+        "src": "/images/pre engineered steel plant/368_Pre-engineered-building-in-Kelowna-pic-5-1600pxW.jpg",
+        "width": 1600,
+        "height": 1200,
+        "bytes": 135979,
+        "sha256": "443c33f00f89ecb99cae8a3f3f2651e7853f1458a969014d8a6001f81402a149"
+      },
+      {
+        "src": "/images/pre engineered steel plant/6758176f2f4a146ac9eda8ad_heroimage.png",
+        "width": 1910,
+        "height": 1032,
+        "bytes": 886605,
+        "sha256": "05b3a6c3dd8476f0e34b3a1bdd8e05aab13ee323fe02861305a3968f30256671"
+      },
+      {
+        "src": "/images/pre engineered steel plant/1735290580.jpg",
+        "width": 1200,
+        "height": 800,
+        "bytes": 287894,
+        "sha256": "f71d23fe991dd2e8b254e7b8143cbc46206abd71c40ec93ebf713b35fc9a9b61"
+      },
+      {
+        "src": "/images/pre engineered steel plant/1745326526.jpg",
+        "width": 1200,
+        "height": 800,
+        "bytes": 211322,
+        "sha256": "a105a884ccc088329d994f38e82260ebcf4743559684b719792098ff1f9fc1b3"
+      },
+      {
+        "src": "/images/pre engineered steel plant/canopy-in-pre-engineered-steel-building.png",
+        "width": 1000,
+        "height": 1333,
+        "bytes": 1926488,
+        "sha256": "954fb2e00ed38b818e7f338168d9125563222e26c773d8a11717c31cb93c103c"
+      },
+      {
+        "src": "/images/pre engineered steel plant/CEC_Double-Lok-7-2-PBC_White-Hunter-Green-Slate-Gray_WSDOT-O.jpg",
+        "width": 2560,
+        "height": 1703,
+        "bytes": 314218,
+        "sha256": "c55273efae06aa7f9054301666208e171acddb7f6c7593dc82204d322763373f"
+      },
+      {
+        "src": "/images/pre engineered steel plant/Commercial-and-Residential-shoothouses-049-e1433968524889.jpg",
+        "width": 1920,
+        "height": 1084,
+        "bytes": 388000,
+        "sha256": "3c962efc4b6b04d30c10d670f8e837bfbc3b2fe217df754054cd20df2374bf45"
+      },
+      {
+        "src": "/images/pre engineered steel plant/Cs-Metal-Building-w-Giant-Door_1-scaled-e1649796775247.jpg",
+        "width": 2560,
+        "height": 825,
+        "bytes": 342432,
+        "sha256": "fd72749ba05a073ffb7b0a92901a6f76084fcc4da785a4e877ed7f18d4bbb85a"
+      },
+      {
+        "src": "/images/pre engineered steel plant/image (1).jpeg",
+        "width": 225,
+        "height": 225,
+        "bytes": 10295,
+        "sha256": "2e490c021d029f4c4d499db0bc55609432c0a3b0fe743aa1d45c8e77d3489df2"
+      },
+      {
+        "src": "/images/pre engineered steel plant/image-01-min.jpg",
+        "width": 1920,
+        "height": 1280,
+        "bytes": 420795,
+        "sha256": "e134e7fa5cbcb6db803463f2464acc62a73132033ecc1ea3064bb7b9b9a5feb1"
+      },
+      {
+        "src": "/images/pre engineered steel plant/images (2).jpeg",
+        "width": 738,
+        "height": 360,
+        "bytes": 52412,
+        "sha256": "00121feed786a219eacb85baa925c6f0c597c42a4dcbdaf5dec7000912ec562d"
+      },
+      {
+        "src": "/images/pre engineered steel plant/images (3).jpeg",
+        "width": 515,
+        "height": 388,
+        "bytes": 31146,
+        "sha256": "51c2d2e90932228b6802c9f120f86e7497e00c36fc1b2df261867e9e80592886"
+      },
+      {
+        "src": "/images/pre engineered steel plant/images (4).jpeg",
+        "width": 738,
+        "height": 414,
+        "bytes": 56380,
+        "sha256": "3e2ac493e33b99082f3c0e22a2015553e9a8f1f04eeb2ffd895de796397c7874"
+      },
+      {
+        "src": "/images/pre engineered steel plant/images (5).jpeg",
+        "width": 678,
+        "height": 452,
+        "bytes": 45897,
+        "sha256": "54da0690703744dce21a07812d8186e1467766ed79a3c2108b83d5f9b732dd2c"
+      },
+      {
+        "src": "/images/pre engineered steel plant/images (7).jpeg",
+        "width": 738,
+        "height": 414,
+        "bytes": 57420,
+        "sha256": "bc8f15c81017791c4f3fc09062b2d3dabc083a6d2964c1c81d5a21f76cb01c11"
+      },
+      {
+        "src": "/images/pre engineered steel plant/images (8).jpeg",
+        "width": 738,
+        "height": 411,
+        "bytes": 61135,
+        "sha256": "4ada48da77fae57a48613b94c8becff52e46dfbac9ea882f3e24ff0229dbd1b8"
+      },
+      {
+        "src": "/images/pre engineered steel plant/images (9).jpeg",
+        "width": 678,
+        "height": 452,
+        "bytes": 21244,
+        "sha256": "53674cd840fd11793810decb42d97cdee6e7ff84ca3a65d97091e832c21cf1f8"
+      },
+      {
+        "src": "/images/pre engineered steel plant/images (10).jpeg",
+        "width": 701,
+        "height": 436,
+        "bytes": 74093,
+        "sha256": "e64265fcf872f535e4017569c8c3264aae8bb8f13c215f36d44ce7f2ed58f599"
+      },
+      {
+        "src": "/images/pre engineered steel plant/images (12).jpeg",
+        "width": 678,
+        "height": 452,
+        "bytes": 80497,
+        "sha256": "373a4933004ac89f4c6d418142dc1571b045034144cdc0a6260accc1af94105f"
+      },
+      {
+        "src": "/images/pre engineered steel plant/images (13).jpeg",
+        "width": 738,
+        "height": 414,
+        "bytes": 40532,
+        "sha256": "f6b47679cf9496a1081955612d781c16c907ef552b581cb05b6ea4f1488582d8"
+      },
+      {
+        "src": "/images/pre engineered steel plant/images (14).jpeg",
+        "width": 563,
+        "height": 355,
+        "bytes": 50367,
+        "sha256": "edab20690ee020cc3584567e35533358bb6ffd4569a5fa10160d3e0aa9b837ff"
+      },
+      {
+        "src": "/images/pre engineered steel plant/images (19).jpeg",
+        "width": 738,
+        "height": 414,
+        "bytes": 54349,
+        "sha256": "853fa000a4cfc2591e338ba46c9ef3d382c7b8b7e75e26d0de10c022a5a6dc7c"
+      },
+      {
+        "src": "/images/pre engineered steel plant/images (20).jpeg",
+        "width": 738,
+        "height": 375,
+        "bytes": 43606,
+        "sha256": "0c4e3ac3d96d9127ee51d278823afef265f84cb2e542431876ed6d9d848d9b17"
+      },
+      {
+        "src": "/images/pre engineered steel plant/images (21).jpeg",
+        "width": 642,
+        "height": 311,
+        "bytes": 32206,
+        "sha256": "6054533e56ca16d5b9604be2ff2268a69228ee3206abacbc09c65d7d78f1f957"
+      },
+      {
+        "src": "/images/pre engineered steel plant/images (22).jpeg",
+        "width": 597,
+        "height": 335,
+        "bytes": 39749,
+        "sha256": "7ed718be5689c8c795a4f30997e99fa1f023020cba42a1f205e0987e154e0ce6"
+      },
+      {
+        "src": "/images/pre engineered steel plant/images (23).jpeg",
+        "width": 531,
+        "height": 376,
+        "bytes": 21968,
+        "sha256": "2cd8074a92b6dce63826e16e02ad8ccb59151cd5919dd5f63a7e0149524b7049"
+      },
+      {
+        "src": "/images/pre engineered steel plant/images (25).jpeg",
+        "width": 738,
+        "height": 414,
+        "bytes": 55926,
+        "sha256": "91474a377380d61d54428bdbb91bef853ebab65eecffc9b4644c48c27cc892be"
+      },
+      {
+        "src": "/images/pre engineered steel plant/images (26).jpeg",
+        "width": 738,
+        "height": 414,
+        "bytes": 37109,
+        "sha256": "b7aec5bb75c85ad4e53bc1208579097f4932599c8c433a5f1a79143ba8117a6e"
+      },
+      {
+        "src": "/images/pre engineered steel plant/images.jpeg",
+        "width": 738,
+        "height": 414,
+        "bytes": 44363,
+        "sha256": "cf42af2852063ac1b837aea43d2b87ac53ccbf839762b38a39a25991b717bc42"
+      },
+      {
+        "src": "/images/pre engineered steel plant/img213-2.jpg",
+        "width": 2118,
+        "height": 1300,
+        "bytes": 384668,
+        "sha256": "34684b12e954bd135c0f930d05038a20d1857a7e3e5c1fcc861ec172fdee1598"
+      },
+      {
+        "src": "/images/pre engineered steel plant/low-angle-view-scafolding-building-scaled.jpg",
+        "width": 2560,
+        "height": 1707,
+        "bytes": 615897,
+        "sha256": "81f81bfdf91b7d2342d885a6f44bede0c07d806b9f03519b26ba98d712a143d0"
+      },
+      {
+        "src": "/images/pre engineered steel plant/main-framing.jpg",
+        "width": 1200,
+        "height": 800,
+        "bytes": 421031,
+        "sha256": "b952089267f3882e88c818c26931dcb6cf99bff5daeeac6260346bb67dee00bb"
+      },
+      {
+        "src": "/images/pre engineered steel plant/Osmacom-Products-Pre-Engineered-buildings-عثماكوم-للصناعات-ا.jpg",
+        "width": 2200,
+        "height": 2016,
+        "bytes": 149693,
+        "sha256": "a7e9b6b0367df00a3b1dda4f125f361bdda01c8ebd0b5af2856977072edd53e4"
+      },
+      {
+        "src": "/images/pre engineered steel plant/Pre-Engineered_Metal_Building.jpg",
+        "width": 2016,
+        "height": 1344,
+        "bytes": 480343,
+        "sha256": "d7a864e174d339f852143faf00a0a84490f1b09a79b2b11649c517de6e9cc6ec"
+      },
+      {
+        "src": "/images/pre engineered steel plant/pre-engineered-building-india-2026-guide-featured.jpg",
+        "width": 1200,
+        "height": 670,
+        "bytes": 199230,
+        "sha256": "3f6ee18ff47f42ef9f8a0d00af07466203364cd732d79495771c79c661ad103c"
+      },
+      {
+        "src": "/images/pre engineered steel plant/Pre-Engineered-Buildings.jpg",
+        "width": 1280,
+        "height": 720,
+        "bytes": 130122,
+        "sha256": "0a4e8b38c73e46736d27f69b80c96dda5d6ce5eec3d1cb4d770c628237211938"
+      },
+      {
+        "src": "/images/pre engineered steel plant/pre-engineered-metal-building (1).jpg",
+        "width": 1365,
+        "height": 1024,
+        "bytes": 87275,
+        "sha256": "3a595130a102696f23da20a15246e275db002f820e6556a6cb34058928d46b66"
+      },
+      {
+        "src": "/images/pre engineered steel plant/pre-engineered-metal-building.jpg",
+        "width": 2560,
+        "height": 1440,
+        "bytes": 177952,
+        "sha256": "3d06239c15e5b0fa2025f126db07031639835e97c3528ef0bb76c82b5b0eec5b"
+      },
+      {
+        "src": "/images/pre engineered steel plant/pre-engineered-steel-buildings (1).jpg",
+        "width": 1254,
+        "height": 836,
+        "bytes": 362085,
+        "sha256": "011e7f65801d72dd33feb9af38badf8ca18096851ac0b7ec84c13dfa168ebb57"
+      },
+      {
+        "src": "/images/pre engineered steel plant/Pre-Engineered-Steel-Buildings-Vs-Conventional-Buildings-Whi.jpg",
+        "width": 1200,
+        "height": 800,
+        "bytes": 476718,
+        "sha256": "932717a3379a0dafb5058041f1a3a3ec76d03d63d2413bce2d315ad62903272a"
+      },
+      {
+        "src": "/images/pre engineered steel plant/pre-engineered-steel-buildings.jpg",
+        "width": 1600,
+        "height": 900,
+        "bytes": 228137,
+        "sha256": "396717897f948e6754825a53d90007450d9d0879ec1a3acf9aee2bc0f5e8c476"
+      },
+      {
+        "src": "/images/pre engineered steel plant/Pre-Engineered-Steel-Manufacturers.png",
+        "width": 2240,
+        "height": 1260,
+        "bytes": 5519151,
+        "sha256": "774b299f511ca06adf0eae8045db17251cb4403f274469de71f432b58e4ebc70"
+      },
+      {
+        "src": "/images/pre engineered steel plant/Q235B-Modular-Pre-Engineered-Steel-Frame-Building-Constructi.jpg",
+        "width": 1260,
+        "height": 1260,
+        "bytes": 268704,
+        "sha256": "59d216fa0421cb3356ea2826cda8e8ee067609a0e4a73bc817d708f8cf654cb2"
+      },
+      {
+        "src": "/images/pre engineered steel plant/RHINO-Argyle-Warehouse-001.jpg",
+        "width": 1236,
+        "height": 779,
+        "bytes": 176840,
+        "sha256": "06b0186c75c72275ec58d94b5bd33bccf5f2fd8e30ddff01add87b30f87d3c31"
+      },
+      {
+        "src": "/images/pre engineered steel plant/SKC-Steel-Buildings-014.jpg",
+        "width": 2000,
+        "height": 965,
+        "bytes": 1454598,
+        "sha256": "75df6c2065504fe80e2e50a10476b0037fc8f0474b4f1eda5a06bfabef291126"
+      },
+      {
+        "src": "/images/pre engineered steel plant/thumbnail_IMG_4568.jpg",
+        "width": 1920,
+        "height": 1440,
+        "bytes": 467560,
+        "sha256": "e68eb876b67fe97565c48b3443c4a1513f00d52477408c61a150075ff624e0a4"
+      },
+      {
+        "src": "/images/pre engineered steel plant/Top-Pre-Engineered-Building-Manufacturers-in-India-1-1.png",
+        "width": 1600,
+        "height": 900,
+        "bytes": 1272369,
+        "sha256": "2acf4ae4b49f93a4ed68011cc4a8de4a51338bee7f2427699accd24a4de98934"
+      },
+      {
+        "src": "/images/pre engineered steel plant/ventilation-system-in-prefabricated-steel-building-1.png",
+        "width": 1600,
+        "height": 1200,
+        "bytes": 3512926,
+        "sha256": "58a41fca1e99601b83761e356672a769a6111fede888b36d1b06cff457f303d1"
+      },
+      {
+        "src": "/images/pre engineered steel plant/windoorcrafter_03228_02105_A_large_pre-engineered_storage_bu.jpg",
+        "width": 1456,
+        "height": 816,
+        "bytes": 335523,
+        "sha256": "5cd202a79b63579d2999f47f8a3b4a363d9b4e1a7c5fa84e0fbcd2b111da7ff9"
+      }
+    ]
+  },
+  {
     "folder": "ss bicycle stand",
     "slug": "stainless-steel-bicycle-stands",
     "images": [

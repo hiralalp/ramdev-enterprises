@@ -1,14 +1,24 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState, type ReactNode } from "react";
 import { ArrowLeft, ArrowRight, Pause, Play } from "lucide-react";
 import "./hero-slider.css";
 
 const banners = [
-  { file: "mall.jpg", label: "Architectural spaces" },
-  { file: "chair.webp", label: "Furniture details" },
-  { file: "gate.jpg", label: "Entrance designs" },
+  {
+    src: "/images/pre engineered steel plant/SKC-Steel-Buildings-014.jpg",
+    label: "Pre-engineered steel plants",
+  },
+  {
+    src: "/images/pre engineered steel plant/image-01-min.jpg",
+    label: "Structural framing",
+  },
+  {
+    src: "/images/pre engineered steel plant/CEC_Double-Lok-7-2-PBC_White-Hunter-Green-Slate-Gray_WSDOT-O.jpg",
+    label: "Industrial building systems",
+  },
 ];
 
 export function HeroSlider({ children }: { children: ReactNode }) {
@@ -58,7 +68,7 @@ export function HeroSlider({ children }: { children: ReactNode }) {
       <div className="hero-slides" aria-live={rotating ? "off" : "polite"}>
         {banners.map((banner, index) => (
           <div
-            key={banner.file}
+            key={banner.src}
             className="hero-slide"
             data-active={index === active}
             aria-hidden={index !== active}
@@ -67,7 +77,7 @@ export function HeroSlider({ children }: { children: ReactNode }) {
             aria-label={`${index + 1} of ${banners.length}: ${banner.label}`}
           >
             <Image
-              src={`/images/reference/ramdev-steels/banner_new/${banner.file}`}
+              src={banner.src}
               alt=""
               fill
               priority={index === 0}
@@ -83,7 +93,9 @@ export function HeroSlider({ children }: { children: ReactNode }) {
         <div className="hero-slide-caption">
           <span>{String(active + 1).padStart(2, "0")} / 03</span>
           <strong>{banners[active].label}</strong>
-          <a href="/image-credits#supplied-catalogue">Reference imagery</a>
+          <Link href="/products/pre-engineered-steel-plants">
+            Explore the plant solution
+          </Link>
         </div>
         <div
           className="hero-slider-controls"
@@ -102,7 +114,7 @@ export function HeroSlider({ children }: { children: ReactNode }) {
             <button
               type="button"
               className="hero-slide-dot"
-              key={banner.file}
+              key={banner.src}
               aria-label={`Show banner ${index + 1}: ${banner.label}`}
               aria-pressed={active === index}
               title={banner.label}

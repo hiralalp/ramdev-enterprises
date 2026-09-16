@@ -60,12 +60,11 @@
 }
 .collection-card .product-media {
   aspect-ratio: 1.1;
-  background: #f0f1f2;
+  background: #d8dde0;
   border-radius: 4px;
 }
 .collection-card .product-media img {
-  object-fit: contain;
-  padding: 8px;
+  object-fit: cover;
 }
 .collection-card .product-card-content {
   padding: 20px 0;

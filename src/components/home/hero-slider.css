@@ -25,6 +25,10 @@
   opacity: 1;
   object-position: center;
 }
+.hero-slider h1 {
+  font-size: 64px;
+  max-width: 740px;
+}
 .hero-slider-shade {
   z-index: -1;
   background: linear-gradient(
@@ -126,7 +130,7 @@
     padding-block: 32px 28px;
   }
   .hero-slider h1 {
-    font-size: 46px;
+    font-size: 42px;
     margin-block: 18px;
   }
   .hero-slider h2 {

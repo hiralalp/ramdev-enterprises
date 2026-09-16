@@ -108,17 +108,20 @@ test("imported collections retain valid local images, unique routes and approval
 });
 
 test("supplied folders map every photo to the correct complete product page", async () => {
-  expect(activeProducts).toHaveLength(52);
-  expect(new Set(activeProducts.map((product) => product.slug)).size).toBe(52);
-  expect(suppliedProducts).toHaveLength(11);
-  expect(selectVisibleProducts(activeProducts)).toEqual([]);
+  expect(activeProducts).toHaveLength(53);
+  expect(new Set(activeProducts.map((product) => product.slug)).size).toBe(53);
+  expect(suppliedProducts).toHaveLength(12);
+  expect(
+    selectVisibleProducts(activeProducts).map((product) => product.slug),
+  ).toEqual(["pre-engineered-steel-plants"]);
   expect(
     suppliedPhotos.reduce(
       (total, collection) => total + collection.images.length,
       0,
     ),
-  ).toBe(172);
+  ).toBe(222);
   const expected = {
+    "pre engineered steel plant": "pre-engineered-steel-plants",
     "ss bicycle stand": "stainless-steel-bicycle-stands",
     "ss bollards": "stainless-steel-bollards",
     "ss bus shelter": "stainless-steel-bus-shelters",
@@ -140,15 +143,24 @@ test("supplied folders map every photo to the correct complete product page", as
     const product = suppliedProducts.find(
       (item) => item.slug === collection.slug,
     )!;
-    const original = products.find((item) => item.slug === collection.slug)!;
+    const original = products.find((item) => item.slug === collection.slug);
     expect(product.sourceFolder).toBe(collection.folder);
     expect(product.sourcePage).toBeUndefined();
-    expect(product.intro).toBe(original.intro);
-    expect(product.specifications).toEqual(original.specifications);
-    expect(product.features).toEqual(original.features);
-    expect(product.applications).toEqual(original.applications);
-    expect(product.faqs).toEqual(original.faqs);
-    expect(product.howToSpecify).toEqual(original.howToSpecify);
+    if (original) {
+      expect(product.intro).toBe(original.intro);
+      expect(product.specifications).toEqual(original.specifications);
+      expect(product.features).toEqual(original.features);
+      expect(product.applications).toEqual(original.applications);
+      expect(product.faqs).toEqual(original.faqs);
+      expect(product.howToSpecify).toEqual(original.howToSpecify);
+    } else {
+      expect(product.slug).toBe("pre-engineered-steel-plants");
+      expect(product.category).toBe("Pre-Engineered Buildings");
+      expect(product.featured).toBe(true);
+      expect(product.intro).toContain(
+        "primary frame, secondary steel, roofing, wall systems",
+      );
+    }
     expect(product.gallery).toEqual(
       collection.images.map((image) => image.src),
     );

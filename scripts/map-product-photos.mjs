@@ -4,6 +4,7 @@ import path from "node:path";
 import sharp from "sharp";
 
 const mappings = [
+  ["pre engineered steel plant", "pre-engineered-steel-plants"],
   ["ss bicycle stand", "stainless-steel-bicycle-stands"],
   ["ss bollards", "stainless-steel-bollards"],
   ["ss bus shelter", "stainless-steel-bus-shelters"],

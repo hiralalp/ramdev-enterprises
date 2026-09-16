@@ -1,6 +1,6 @@
 # Ramdev Enterprises
 
-A responsive, requirement-led B2B website built from the supplied specifications. The active catalogue contains 52 collections in five groups: 41 from the supplied local Ramdev Steel Industries website and 11 backed by owner-supplied product photo folders. All remain unapproved until owner review. The original 27 proposed products are retained as legacy data. No clients, certifications, case studies, technical ratings or company history have been invented.
+A responsive industrial website positioning pre-engineered steel plants as the primary business. The active catalogue contains 53 collections in six groups: the approved primary plant offering, 41 collections from the supplied local Ramdev Steel Industries website and 11 additional products backed by owner-supplied photo folders. The 52 secondary collections remain unapproved until owner review. The original 27 proposed products are retained as legacy data. No clients, certifications, case studies, technical ratings or company history have been invented.
 
 ## Stack
 
@@ -39,8 +39,8 @@ Without both mail settings, valid submissions receive HTTP 503 with an honest un
 - `src/data/company.ts`: verified contact information. PAN is never rendered publicly. The supplied phone is incomplete; no call or WhatsApp link is generated.
 - `src/data/reference-products.ts`: active 41 collections, category and canonical route mapping, specifications, FAQs and approval list.
 - `src/data/reference-catalogue.json`: generated source-page, banner and gallery-image mapping with intrinsic dimensions.
-- `src/data/products.ts`: retained 27 legacy briefs; combines the reference collections and 11 photo-backed products into the active catalogue. Unmatched legacy URLs remain accessible in local draft preview.
-- `src/data/supplied-product-photos.json`: generated mapping of 11 product folders and all 172 supplied images, with dimensions and checksums.
+- `src/data/products.ts`: retained 27 legacy briefs; combines the primary plant offering, reference collections and 11 other photo-backed products into the active catalogue. Unmatched legacy URLs remain accessible in local draft preview.
+- `src/data/supplied-product-photos.json`: generated mapping of 12 product folders and all 222 supplied images, with dimensions and checksums.
 - `src/data/industries.ts`: application areas, not customer claims.
 - `src/data/projects.ts`: intentionally empty until case studies are approved.
 - `src/data/insights.ts`: original general procurement guides.
@@ -49,7 +49,7 @@ Without both mail settings, valid submissions receive HTTP 503 with an honest un
 
 ### Product Approval and Preview
 
-The active `approvedCollectionSlugs` list is initially empty. Public listings, navigation, home sections, related products and form suggestions include only approved entries. Unapproved detail URLs return 404. Drafts never enter the sitemap. With no approved entries, the product listing shows a direct-enquiry state.
+The pre-engineered steel plant is approved because the owner explicitly confirmed it as the company&apos;s primary business. Public listings, navigation, home sections, related products and form suggestions include approved entries only. Unapproved detail URLs return 404 and drafts never enter the sitemap. Reference-site approvals continue to use `approvedCollectionSlugs`; photo-backed entries inherit the approval flag from their product definition.
 
 For local owner review, set `NEXT_PUBLIC_SHOW_DRAFT_PRODUCTS=true` and run the development server. Preview surfaces show Draft badges and an owner-review notice, set `noindex, nofollow`, and disallow crawlers. This is a development preview, not an authenticated admin portal: keep it local. `npm run build` and `npm start` ignore draft preview, even if the flag is accidentally enabled.
 
@@ -61,7 +61,7 @@ $env:NEXT_PUBLIC_SITE_URL = 'http://127.0.0.1:3001'
 npm run dev -- --hostname 127.0.0.1 --port 3001
 ```
 
-After the owner confirms a reference-site collection, review its name, availability, scope, technical copy, FAQs and image publication rights; add its canonical slug to `approvedCollectionSlugs` in `src/data/reference-products.ts`, then rebuild and redeploy. For one of the 11 photo-backed products, set `approved: true` in its original `proposedProduct` brief in `src/data/products.ts`; its active entry inherits that flag. Approval is per product, not per category. Remove approval and rebuild to withdraw it. Never enable approval merely to populate a page.
+After the owner confirms a reference-site collection, review its name, availability, scope, technical copy, FAQs and image publication rights; add its canonical slug to `approvedCollectionSlugs` in `src/data/reference-products.ts`, then rebuild and redeploy. For one of the photo-backed products, set `approved: true` in its product definition in `src/data/products.ts`; its active entry inherits that flag. Approval is per product, not per category. Remove approval and rebuild to withdraw it. Never enable approval merely to populate a page.
 
 The listing, filters, navigation, detail route and sitemap derive from the active catalogue. Collections use photographic banners, image-led cards, a gallery displayed in batches of 24, and a full-screen viewer with zoom, thumbnails and keyboard navigation through Yet Another React Lightbox. Design-specific enquiry links validate the image number server-side and prefill the collection, reference number and image path. Specification guidance, FAQs and related collections follow the gallery. Legacy detail pages retain the original procurement template.
 
@@ -98,7 +98,7 @@ This supplied collection is not asserted to be open-licensed. Some images includ
 
 ### Owner-Supplied Product Folders
 
-Run `node scripts/map-product-photos.mjs` after updating the supplied `public/images/ss ...` folders. The mapper validates image decoding, records dimensions and SHA-256 hashes, and writes `src/data/supplied-product-photos.json` without changing originals. Folder `ss grattings` intentionally maps to Stainless Steel Gratings. All 172 images are used across 11 gallery pages; the first image in filename order is the card/hero image. Existing product-specific specifications, features, applications, FAQs and specifying guidance are retained. The gallery supports full-screen viewing and selected-image enquiries.
+Run `node scripts/map-product-photos.mjs` after updating `public/images/pre engineered steel plant` or the supplied `public/images/ss ...` folders. The mapper validates image decoding, records dimensions and SHA-256 hashes, and writes `src/data/supplied-product-photos.json` without changing originals. Folder `ss grattings` intentionally maps to Stainless Steel Gratings. All 222 images are used across 12 gallery pages. The preferred plant hero is selected explicitly; other pages use the first image in filename order. Product-specific specifications, features, applications, FAQs and specifying guidance are retained. The gallery supports full-screen viewing and selected-image enquiries.
 
 After including related collections, seven specification products still lack dedicated active collections and new photo folders: SS Drywall Stone Cladding Clamps, Turnkey Project Fabrication, Expansion Joints, Custom Stainless Steel Fabrication, Stainless Steel Cladding, Waterjet-Cut Steel Designs, and Custom Metal Arts & Sculptures. Their legacy preview pages remain available.
 

@@ -1,23 +1,25 @@
 import {
   Hero,
   TrustStrip,
+  PlantFocus,
   ProductCategories,
   AboutPreview,
   WhyChooseUs,
+  ClientsSection,
   FeaturedProducts,
   IndustriesSection,
   CapabilitiesSection,
   FeaturedProjects,
   QualitySection,
   RFQBanner,
-  InsightsSection,
+  FaqTestimonialsSection,
   ContactSection,
 } from "@/components/home/Sections";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata(
-  "Industrial & Material Solutions",
-  "Requirement-driven stainless steel and industrial material enquiries. Connect with Ramdev Enterprises in Chennai to discuss your application.",
+  "Pre-Engineered Steel Plants",
+  "Pre-engineered steel plants for industrial, manufacturing and warehouse requirements. Discuss site, building and project scope with Ramdev Enterprises Chennai.",
   "/",
 );
 export default function Home() {
@@ -25,16 +27,18 @@ export default function Home() {
     <>
       <Hero />
       <TrustStrip />
+      <PlantFocus />
       <ProductCategories />
       <AboutPreview />
       <WhyChooseUs />
+      <ClientsSection />
       <FeaturedProducts />
       <IndustriesSection />
       <CapabilitiesSection />
       <FeaturedProjects />
       <QualitySection />
       <RFQBanner />
-      <InsightsSection />
+      <FaqTestimonialsSection />
       <ContactSection />
     </>
   );

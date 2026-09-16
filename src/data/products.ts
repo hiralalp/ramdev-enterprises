@@ -1336,20 +1336,123 @@ export const legacyProducts: Product[] = [
   }),
 ];
 
+const preEngineeredSteelPlant: Product = {
+  slug: "pre-engineered-steel-plants",
+  name: "Pre-Engineered Steel Plants",
+  category: "Pre-Engineered Buildings",
+  approved: true,
+  featured: true,
+  shortDescription:
+    "Project-specific pre-engineered steel plants for industrial production, warehousing and operational facilities.",
+  seoTitle: "Pre-Engineered Steel Plants | Ramdev Enterprises Chennai",
+  metaDescription:
+    "Plan a pre-engineered steel plant with Ramdev Enterprises Chennai. Share the site layout, building dimensions, operating needs and project scope for review.",
+  intro:
+    "Pre-engineered steel plants bring the primary frame, secondary steel, roofing, wall systems and project interfaces into one coordinated building requirement. Ramdev Enterprises develops the project around the proposed use, site dimensions, clear span, height, loading inputs, openings and agreed supply or erection scope. Final structural design, materials and execution requirements are established against approved drawings and project-specific engineering inputs.",
+  features: [
+    "Project-specific building configuration",
+    "Primary and secondary steel framing",
+    "Roofing and wall-cladding coordination",
+    "Openings, ventilation and access integration",
+    "Mezzanine and crane-interface planning where required",
+    "Defined supply and erection responsibilities",
+  ],
+  applications: [
+    "Manufacturing plants",
+    "Industrial workshops",
+    "Warehouses and logistics facilities",
+    "Production and assembly buildings",
+    "Equipment and maintenance sheds",
+    "Utility and process-support buildings",
+  ],
+  specifications: [
+    {
+      label: "Building use",
+      value:
+        "Manufacturing, warehousing, workshop or project-specific operation",
+    },
+    {
+      label: "Site and geometry",
+      value: "Location, length, width, eave height, clear span and bay spacing",
+    },
+    {
+      label: "Design inputs",
+      value:
+        "Applicable codes, loading data and geotechnical / civil inputs to be confirmed",
+    },
+    {
+      label: "Envelope",
+      value:
+        "Roofing, wall cladding, insulation, daylighting and ventilation requirements",
+    },
+    {
+      label: "Operational interfaces",
+      value:
+        "Doors, cranes, mezzanines, equipment, utilities and future expansion",
+    },
+    {
+      label: "Project scope",
+      value:
+        "Design, detailing, fabrication, supply and erection responsibilities to be agreed",
+    },
+  ],
+  howToSpecify: [
+    "Share the site location, intended operation and available plot or building layout.",
+    "Provide required length, width, clear height, spans, bays and major openings.",
+    "Identify equipment loads, crane requirements, mezzanines, ventilation and service interfaces.",
+    "Confirm applicable design criteria, target schedule and the required design, supply and erection scope.",
+  ],
+  faqs: [
+    {
+      question:
+        "What information is needed to discuss a pre-engineered steel plant?",
+      answer:
+        "Start with the site location, building use, dimensions, clear height, span, major openings and target schedule. Share equipment, crane, mezzanine and utility requirements where applicable.",
+    },
+    {
+      question: "Can the building be planned around production equipment?",
+      answer:
+        "Yes. Equipment positions, maintenance clearances, service routes and operating access should be identified early so their interfaces can be reviewed with the building layout.",
+    },
+    {
+      question: "Are roofing, cladding and ventilation part of the scope?",
+      answer:
+        "They can be included when defined in the enquiry. Specify the required roof and wall systems, insulation, daylighting, ventilation, drainage and openings so responsibilities are clear.",
+    },
+    {
+      question: "Does the enquiry include erection and civil work?",
+      answer:
+        "Design, fabrication, supply, erection, foundations and other civil responsibilities must be stated and agreed in the quotation. Images are references and do not establish the final scope.",
+    },
+  ],
+  relatedSlugs: [
+    "stainless-steel-canopies",
+    "stainless-steel-facades",
+    "railings-turnkey-solutions",
+  ],
+};
+
 export const suppliedProducts: Product[] = suppliedPhotos.map((collection) => {
-  const original = legacyProducts.find(
-    (product) => product.slug === collection.slug,
-  );
+  const original =
+    collection.slug === preEngineeredSteelPlant.slug
+      ? preEngineeredSteelPlant
+      : legacyProducts.find((product) => product.slug === collection.slug);
   if (!original) throw new Error(`Missing product brief: ${collection.slug}`);
+  const preferredPlantImage = collection.images.find((image) =>
+    image.src.endsWith("/SKC-Steel-Buildings-014.jpg"),
+  );
   return {
     ...original,
     category:
-      collection.slug === "stainless-steel-planters"
-        ? "Decorative & Accessories"
-        : "Stainless Steel",
+      collection.slug === preEngineeredSteelPlant.slug
+        ? preEngineeredSteelPlant.category
+        : collection.slug === "stainless-steel-planters"
+          ? "Decorative & Accessories"
+          : "Stainless Steel",
     secondaryCategories: undefined,
     sourceFolder: collection.folder,
-    image: collection.images[0].src,
+    image: preferredPlantImage?.src || collection.images[0].src,
+    banner: preferredPlantImage?.src,
     gallery: collection.images.map((image) => image.src),
     galleryImages: collection.images.map(({ src, width, height }) => ({
       src,
@@ -1359,7 +1462,15 @@ export const suppliedProducts: Product[] = suppliedPhotos.map((collection) => {
     relatedSlugs: [...original.relatedSlugs],
   };
 });
-export const products: Product[] = [...referenceProducts, ...suppliedProducts];
+export const products: Product[] = [
+  ...suppliedProducts.filter(
+    (product) => product.slug === preEngineeredSteelPlant.slug,
+  ),
+  ...referenceProducts,
+  ...suppliedProducts.filter(
+    (product) => product.slug !== preEngineeredSteelPlant.slug,
+  ),
+];
 for (const product of suppliedProducts) {
   product.relatedSlugs = [
     ...new Set([
@@ -1374,7 +1485,8 @@ for (const product of suppliedProducts) {
     .filter((slug) => slug !== product.slug)
     .slice(0, 3);
 }
-export {
-  referenceCategories as catalogueCategories,
-  referenceCategories as productCategories,
-};
+export { catalogueCategories, catalogueCategories as productCategories };
+const catalogueCategories = [
+  "Pre-Engineered Buildings",
+  ...referenceCategories,
+];

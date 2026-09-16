@@ -63,6 +63,7 @@ export function CollectionBanner({ product }: { product: Product }) {
   );
 }
 export function ReferenceCollection({ product }: { product: Product }) {
+  const isPlant = product.slug === "pre-engineered-steel-plants";
   return (
     <div className="reference-collection">
       <CollectionBanner product={product} />
@@ -72,7 +73,11 @@ export function ReferenceCollection({ product }: { product: Product }) {
             <Images size={18} aria-hidden="true" />
             {product.galleryImages!.length} design references
           </span>
-          <span>Drawing & finish coordination</span>
+          <span>
+            {isPlant
+              ? "Design & project coordination"
+              : "Drawing & finish coordination"}
+          </span>
           <a href="#specifications">
             Specification guidance
             <ArrowDown size={14} aria-hidden="true" />
@@ -84,7 +89,11 @@ export function ReferenceCollection({ product }: { product: Product }) {
           <div className="collection-heading">
             <div>
               <p className="eyebrow">OUR COLLECTION</p>
-              <h2>Discover the details.</h2>
+              <h2>
+                {isPlant
+                  ? "Explore building references."
+                  : "Discover the details."}
+              </h2>
             </div>
             <p>
               {product.sourceFolder
@@ -110,11 +119,15 @@ export function ReferenceCollection({ product }: { product: Product }) {
           <div>
             <p className="eyebrow">YOUR PROJECT, YOUR DETAILS</p>
             <h2>
-              Found a design
+              {isPlant ? "Planning a new" : "Found a design"}
               <br />
-              that fits your space?
+              {isPlant ? "industrial building?" : "that fits your space?"}
             </h2>
-            <p>Share your chosen reference, dimensions and quantity.</p>
+            <p>
+              {isPlant
+                ? "Share the site, operation, building dimensions and target schedule."
+                : "Share your chosen reference, dimensions and quantity."}
+            </p>
           </div>
           <Button href={`/request-quote?product=${product.slug}`}>
             Start an enquiry

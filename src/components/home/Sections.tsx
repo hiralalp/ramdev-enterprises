@@ -1,4 +1,5 @@
 import { HeroSlider } from "./HeroSlider";
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowUpRight,
@@ -31,6 +32,7 @@ import { industries } from "@/data/industries";
 import { insights } from "@/data/insights";
 import { projects } from "@/data/projects";
 import { company, mapUrl } from "@/data/company";
+import { clients } from "@/data/clients";
 
 export function Hero() {
   return (
@@ -39,26 +41,23 @@ export function Hero() {
         <div className="hero-content">
           <p className="eyebrow">
             <span />
-            PRECISION. RELIABILITY. PERFORMANCE.
+            PRE-ENGINEERED STEEL BUILDING SOLUTIONS
           </p>
           <h1>
-            Ramdev
-            <br />
-            Enterprises<span>.</span>
+            Pre-engineered
+            <br /> steel plants<span>.</span>
           </h1>
-          <h2>
-            Stainless steel & industrial solutions.
-            <br />
-            Built to perform.
-          </h2>
+          <h2>Planned around your process, site and project scope.</h2>
           <p className="hero-description">
-            Requirement-driven material and industrial solutions for demanding
-            applications.
+            Design, fabrication, supply and erection requirements coordinated
+            for industrial plants, warehouses and operational buildings.
           </p>
           <div className="button-row">
-            <Button href="/request-quote">Request a quote</Button>
-            <Button href="/products" secondary>
-              Explore products
+            <Button href="/request-quote?product=pre-engineered-steel-plants">
+              Discuss your plant
+            </Button>
+            <Button href="/products/pre-engineered-steel-plants" secondary>
+              Explore the solution
             </Button>
           </div>
         </div>
@@ -71,10 +70,10 @@ export function TrustStrip() {
     <div className="trust-strip">
       <Container>
         {[
-          [ClipboardCheck, "Requirement-led approach"],
-          [FileCheck2, "Clear specification review"],
-          [MessagesSquare, "Responsive communication"],
-          [PackageCheck, "Delivery coordination"],
+          [ClipboardCheck, "Project-specific planning"],
+          [FileCheck2, "Design input coordination"],
+          [Factory, "Industrial building focus"],
+          [PackageCheck, "Supply & erection scope"],
         ].map(([Icon, label]) => {
           const ItemIcon = Icon as typeof ClipboardCheck;
           return (
@@ -88,16 +87,66 @@ export function TrustStrip() {
     </div>
   );
 }
+export function PlantFocus() {
+  return (
+    <section className="section plant-focus">
+      <Container>
+        <div className="plant-focus-copy">
+          <p className="eyebrow">
+            <span />
+            PRIMARY BUSINESS
+          </p>
+          <h2>Steel plants shaped around the work inside.</h2>
+          <p>
+            From production floors and warehouses to workshops and equipment
+            buildings, each project begins with the operation, site and
+            clear-span requirement.
+          </p>
+          <ul>
+            <li>
+              <Check size={17} aria-hidden="true" />
+              Primary and secondary framing
+            </li>
+            <li>
+              <Check size={17} aria-hidden="true" />
+              Roof, wall and ventilation systems
+            </li>
+            <li>
+              <Check size={17} aria-hidden="true" />
+              Crane, mezzanine and equipment interfaces
+            </li>
+            <li>
+              <Check size={17} aria-hidden="true" />
+              Defined design, supply and erection scope
+            </li>
+          </ul>
+          <Button href="/products/pre-engineered-steel-plants">
+            View plant capabilities
+          </Button>
+        </div>
+        <div className="plant-focus-visual">
+          <Image
+            src="/images/pre engineered steel plant/main-framing.jpg"
+            alt="Reference view of structural steel framing for an industrial building"
+            fill
+            sizes="(max-width: 900px) 100vw, 55vw"
+          />
+          <span>STRUCTURAL SYSTEM / REFERENCE IMAGE</span>
+        </div>
+      </Container>
+    </section>
+  );
+}
 export function ProductCategories() {
   return (
     <section className="section" id="product-categories">
       <Container>
         <SectionHeading
-          eyebrow="MATERIALS & SOLUTIONS"
-          title="The right starting point for your requirement."
+          eyebrow="SECONDARY PRODUCTS & SOLUTIONS"
+          title="Supporting steel products for the wider project."
           href="/products"
           linkLabel="Explore all products"
-          description="Explore material and component enquiry categories. Availability and specifications are confirmed against your requirement."
+          description="Beyond pre-engineered steel plants, explore stainless-steel, architectural and interior product collections."
         />
         {!products.length && <CatalogueEmpty />}
         <div className="product-grid">
@@ -123,15 +172,16 @@ export function AboutPreview() {
       <Container className="split-section">
         <div className="about-visual">
           <ImagePlaceholder
-            src="/images/infrastructure/overview.webp"
-            alt="Ramdev Enterprises infrastructure"
-            label="MATERIAL THINKING / REQUIREMENT-LED SOLUTIONS"
+            src="/images/pre engineered steel plant/low-angle-view-scafolding-building-scaled.jpg"
+            alt="Reference view of a steel building frame under construction"
+            label="STEEL BUILDING DELIVERY / REFERENCE IMAGE"
             variant="flat"
           />
           <div className="location-stamp">
             <MapPin size={18} />
             <div>
-              Rooted in Chennai.<span>Focused on your requirement.</span>
+              Based in Chennai.
+              <span>Building for industrial requirements.</span>
             </div>
           </div>
         </div>
@@ -141,18 +191,19 @@ export function AboutPreview() {
             ABOUT RAMDEV ENTERPRISES
           </p>
           <h2>
-            Good solutions begin
+            Industrial buildings begin
             <br />
-            with understanding.
+            with the operation.
           </h2>
           <p>
-            Ramdev Enterprises supports industrial and engineering requirements
-            through responsive sourcing, clear communication and requirement-led
-            material solutions.
+            Ramdev Enterprises focuses on pre-engineered steel plants shaped
+            around the intended operation, site constraints and required
+            building geometry.
           </p>
           <p>
-            From an initial specification to delivery discussions, our approach
-            starts with what your application needs.
+            The discussion connects building layout, structural inputs, envelope
+            systems, equipment interfaces and the agreed design, fabrication,
+            supply and erection scope.
           </p>
           <div className="inline-facts">
             <div>
@@ -160,8 +211,8 @@ export function AboutPreview() {
               <strong>Chennai, Tamil Nadu</strong>
             </div>
             <div>
-              <span>OUR APPROACH</span>
-              <strong>Requirement first</strong>
+              <span>PRIMARY FOCUS</span>
+              <strong>Pre-engineered steel plants</strong>
             </div>
           </div>
           <Link className="text-link" href="/about">
@@ -176,23 +227,23 @@ export function AboutPreview() {
 const reasons = [
   {
     icon: ClipboardCheck,
-    title: "Your requirement, understood.",
-    text: "A clear conversation about the application, dimensions and expected outcome.",
+    title: "The operation comes first.",
+    text: "Building geometry starts with production flow, equipment, access and future needs.",
   },
   {
     icon: FileCheck2,
-    title: "Details that stay clear.",
-    text: "Specification and documentation needs discussed before moving forward.",
+    title: "Interfaces stay coordinated.",
+    text: "Framing, envelope, cranes, mezzanines, openings and services are reviewed together.",
   },
   {
     icon: MessagesSquare,
-    title: "Communication that matters.",
-    text: "Direct, practical conversations about your material enquiry.",
+    title: "Scope remains explicit.",
+    text: "Design, fabrication, supply, erection and civil responsibilities are defined before execution.",
   },
   {
     icon: PackageCheck,
-    title: "A coordinated approach.",
-    text: "Packaging and delivery requirements considered as part of the discussion.",
+    title: "Delivery is project-led.",
+    text: "Drawings, material flow, logistics and site sequencing are connected to the agreed programme.",
   },
 ];
 export function WhyChooseUs() {
@@ -201,7 +252,7 @@ export function WhyChooseUs() {
       <Container>
         <SectionHeading
           eyebrow="THE RAMDEV APPROACH"
-          title="More than materials. A considered approach."
+          title="One building system. Many coordinated decisions."
         />
         <div className="reason-grid">
           {reasons.map((reason, index) => (
@@ -215,6 +266,26 @@ export function WhyChooseUs() {
             </article>
           ))}
         </div>
+      </Container>
+    </section>
+  );
+}
+export function ClientsSection() {
+  return (
+    <section className="section surface clients-section">
+      <Container>
+        <SectionHeading
+          eyebrow="BUILDERS & DEVELOPERS WE HAVE WORKED WITH"
+          title="Trusted by builders, developers and project teams."
+          description="Official client logo artwork will be added once each company confirms usage. Names are listed as supplied."
+        />
+        <ul className="clients-grid">
+          {clients.map((clientName) => (
+            <li key={clientName} className="client-tile">
+              <span>{clientName}</span>
+            </li>
+          ))}
+        </ul>
       </Container>
     </section>
   );
@@ -251,10 +322,10 @@ export function IndustriesSection() {
       <Container>
         <SectionHeading
           eyebrow="INDUSTRIES & APPLICATIONS"
-          title="Different applications. The same attention to detail."
+          title="Industrial spaces built around different operations."
           href="/industries"
           linkLabel="View applications"
-          description="Explore possible application areas, with suitability reviewed against your project specification."
+          description="Manufacturing, warehousing, engineering and process-support buildings each begin with different operational inputs."
         />
         <div className="industry-grid">
           {industries.map((industry, index) => {
@@ -285,16 +356,16 @@ export function CapabilitiesSection() {
         <div className="section-copy">
           <p className="eyebrow">
             <span />
-            FROM REQUIREMENT TO NEXT STEPS
+            FROM BRIEF TO BUILDING SCOPE
           </p>
           <h2>
-            A clear process.
-            <br />A considered solution.
+            A coordinated path
+            <br /> from brief to building.
           </h2>
           <p>
-            Good sourcing starts with a complete brief. Share your requirements
-            so the relevant material, documentation and delivery details can be
-            discussed together.
+            A useful plant brief connects the site, operation, building
+            geometry, structural criteria and project responsibilities before
+            work proceeds.
           </p>
           <Button href="/request-quote" secondary>
             Discuss your requirement
@@ -303,20 +374,20 @@ export function CapabilitiesSection() {
         <ol className="process-list">
           {[
             [
-              "Share your requirement",
-              "Product form, drawings, grade, quantity and application.",
+              "Define the operation",
+              "Building use, site, process flow, equipment and access needs.",
             ],
             [
-              "Review the details",
-              "Clarify the specification and documentation needs.",
+              "Set the building inputs",
+              "Length, width, height, spans, loads, openings and envelope requirements.",
             ],
             [
-              "Discuss the proposal",
-              "Review availability, quotation and delivery expectations.",
+              "Coordinate the system",
+              "Review framing, roofing, cladding, interfaces and execution responsibilities.",
             ],
             [
-              "Coordinate the next step",
-              "Confirm the agreed scope before proceeding.",
+              "Confirm project scope",
+              "Agree drawings, supply, erection, schedule and commercial boundaries.",
             ],
           ].map(([title, text], index) => (
             <li key={title}>
@@ -437,6 +508,75 @@ export function InsightsSection() {
             </article>
           ))}
         </div>
+      </Container>
+    </section>
+  );
+}
+const homepageFaqs = [
+  {
+    question: "What information is needed to discuss a steel plant?",
+    answer:
+      "Start with the site location, intended building use, approximate length, width and clear height, required clear spans, openings, equipment interfaces and target programme.",
+  },
+  {
+    question: "Can cranes, mezzanines and service openings be considered?",
+    answer:
+      "Yes. Share crane loads, mezzanine use, equipment layouts and service-opening requirements early so the relevant structural interfaces can be reviewed as part of the building brief.",
+  },
+  {
+    question: "Does the scope include supply and erection?",
+    answer:
+      "The required scope can cover design coordination, fabrication, supply and erection. Exact responsibilities, exclusions and site dependencies are confirmed for each enquiry.",
+  },
+  {
+    question: "How does a project enquiry begin?",
+    answer:
+      "Send the available site information, drawings, operational requirements and schedule. The initial review identifies missing inputs and defines the next technical and commercial discussion.",
+  },
+];
+export function FaqTestimonialsSection() {
+  return (
+    <section className="section faq-testimonials-section">
+      <Container className="faq-testimonials-layout">
+        <div className="homepage-faqs">
+          <p className="eyebrow">
+            <span />
+            FREQUENTLY ASKED QUESTIONS
+          </p>
+          <h2>Useful answers before the first discussion.</h2>
+          <div className="homepage-faq-list">
+            {homepageFaqs.map(({ question, answer }, index) => (
+              <details key={question} open={index === 0}>
+                <summary>
+                  <span>{question}</span>
+                  <span className="faq-toggle" aria-hidden="true" />
+                </summary>
+                <p>{answer}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+        <aside className="testimonial-panel" aria-labelledby="client-voices">
+          <p className="eyebrow">
+            <span />
+            CLIENT VOICES
+          </p>
+          <div className="testimonial-mark" aria-hidden="true">
+            &ldquo;
+          </div>
+          <h2 id="client-voices">Project experience, in the client&apos;s words.</h2>
+          <p>
+            Approved client testimonials will appear here once the wording,
+            attribution and project context are confirmed for publication.
+          </p>
+          <a
+            className="text-link testimonial-link"
+            href={`mailto:${company.email}?subject=Project%20feedback`}
+          >
+            Share project feedback
+            <ArrowUpRight size={17} aria-hidden="true" />
+          </a>
+        </aside>
       </Container>
     </section>
   );

@@ -134,6 +134,31 @@ test("homepage screenshots, imagery and accessible landmarks", async ({
   await expect(
     page.locator('.hero-slide[data-active="true"] .hero-art'),
   ).toBeVisible();
+  await expect(page.locator("h1")).toHaveText("Pre-engineered steel plants.");
+  await expect(
+    page.getByText("PRIMARY BUSINESS", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "View plant capabilities", exact: true }),
+  ).toHaveAttribute("href", "/products/pre-engineered-steel-plants");
+  await expect(
+    page.getByRole("heading", {
+      name: "Useful answers before the first discussion.",
+    }),
+  ).toBeVisible();
+  await expect(page.locator(".homepage-faq-list details")).toHaveCount(4);
+  await expect(
+    page.getByRole("heading", {
+      name: "Project experience, in the client's words.",
+    }),
+  ).toBeVisible();
+  await expect(page.locator(".insight-grid")).toHaveCount(0);
+  await expect(
+    page.getByRole("heading", {
+      name: "Trusted by builders, developers and project teams.",
+    }),
+  ).toBeVisible();
+  await expect(page.locator(".client-tile")).toHaveCount(35);
   expect(
     await page
       .locator('.hero-slide[data-active="true"] .hero-art')
@@ -226,6 +251,37 @@ test("homepage banners rotate, pause and remain responsive", async ({
   ).toHaveCount(0);
   await page.getByRole("button", { name: "Next banner", exact: true }).click();
   await expect(active).toHaveAttribute("aria-label", /^2 of 3/);
+});
+
+test("pre-engineered steel plant is the primary homepage and catalogue offering", async ({
+  page,
+}) => {
+  test.skip(!preview, "The plant product remains in owner-review preview.");
+  await page.goto("/");
+  await expect(
+    page.locator('.hero-slide[data-active="true"] img'),
+  ).toHaveAttribute(
+    "src",
+    /pre%20engineered%20steel%20plant.*SKC-Steel-Buildings-014/,
+  );
+  await page
+    .getByRole("link", { name: "Explore the solution", exact: true })
+    .click();
+  await expect(page).toHaveURL("/products/pre-engineered-steel-plants");
+  await expect(page.locator("h1")).toHaveText("Pre-Engineered Steel Plants");
+  await expect(page.locator(".collection-strip")).toContainText(
+    "50 design references",
+  );
+  await expect(page.locator(".specification-table tbody tr")).toHaveCount(6);
+  await expect(page.locator(".product-feature-grid li")).toHaveCount(6);
+  await expect(page.locator(".product-application-grid li")).toHaveCount(6);
+  await expect(page.locator(".faq-list details")).toHaveCount(4);
+  await page.locator(".design-image").first().click();
+  await expect(page.locator(".yarl__root")).toBeVisible();
+  await page.locator(".lightbox-quote").click();
+  await expect(page.getByLabel("Product / requirement")).toHaveValue(
+    "Pre-Engineered Steel Plants",
+  );
 });
 
 test("keyboard menus, modal focus containment and navigation", async ({
@@ -454,7 +510,10 @@ test("inner-page accessibility, 404s and SEO endpoints", async ({
   }
   const sitemap = await request.get("/sitemap.xml");
   expect(sitemap.status()).toBe(200);
-  expect(await sitemap.text()).not.toContain("/products/");
+  const sitemapText = await sitemap.text();
+  expect(sitemapText).toContain("/products/pre-engineered-steel-plants");
+  for (const product of products.filter((item) => !item.approved))
+    expect(sitemapText).not.toContain(`/products/${product.slug}`);
   expect(await (await request.get("/robots.txt")).text()).toContain(
     preview ? "Disallow: /" : "Disallow: /api/",
   );
@@ -465,8 +524,15 @@ test("production excludes drafts from routes, suggestions, page payloads and bro
   request,
 }) => {
   test.skip(preview, "Production publishing check.");
-  for (const product of products)
+  const approved = products.filter((product) => product.approved);
+  const drafts = products.filter((product) => !product.approved);
+  expect(approved.map((product) => product.slug)).toEqual([
+    "pre-engineered-steel-plants",
+  ]);
+  for (const product of drafts)
     expect((await request.get(`/products/${product.slug}`)).status()).toBe(404);
+  for (const product of approved)
+    expect((await request.get(`/products/${product.slug}`)).status()).toBe(200);
   const chunks = new Set<string>();
   for (const route of [
     "/",
@@ -477,8 +543,7 @@ test("production excludes drafts from routes, suggestions, page payloads and bro
   ]) {
     const response = await page.goto(route);
     const html = await response!.text();
-    for (const product of products) expect(html).not.toContain(product.name);
-    await expect(page.locator('a[href^="/products/"]')).toHaveCount(0);
+    for (const product of drafts) expect(html).not.toContain(product.name);
     await expect(page.locator(".draft-badge")).toHaveCount(0);
     for (const source of await page
       .locator("script[src]")
@@ -487,16 +552,16 @@ test("production excludes drafts from routes, suggestions, page payloads and bro
       ))
       chunks.add(source);
   }
-  await expect(page.getByLabel("Product / requirement")).toHaveValue("");
-  await expect(page.locator("datalist option")).toHaveCount(1);
-  await expect(page.locator("datalist option")).toHaveAttribute(
-    "value",
-    "Custom requirement",
+  await expect(page.getByLabel("Product / requirement")).toHaveValue(
+    "Pre-Engineered Steel Plants",
   );
+  await expect(
+    page.locator('datalist option[value="Pre-Engineered Steel Plants"]'),
+  ).toHaveCount(1);
   for (const chunk of chunks) {
     const code = await (await request.get(chunk)).text();
-    expect(code).not.toContain(products[0].intro);
-    expect(code).not.toContain(products[26].name);
+    expect(code).not.toContain(drafts[0].intro);
+    expect(code).not.toContain(drafts.at(-1)!.name);
   }
 });
 
@@ -505,7 +570,7 @@ test("every draft detail has unique metadata, complete sections, working RFQ and
 }) => {
   test.skip(!preview, "Draft catalogue preview check.");
   test.setTimeout(600000);
-  for (const product of products) {
+  for (const product of products.filter((item) => !item.approved)) {
     await page.goto(`/products/${product.slug}`);
     await expect(page).toHaveTitle(product.seoTitle);
     await expect(page.locator("h1")).toHaveText(product.name);

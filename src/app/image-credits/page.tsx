@@ -42,12 +42,13 @@ export default function ImageCreditsPage() {
         <Container>
           <h2>Owner-supplied product photographs</h2>
           <p>
-            The bicycle stand, bollard, bus shelter, cable tray, canopy, corner
-            guard, dustbin, facade, grating, pergola and planter collections use
-            images supplied in dedicated product folders. The original files and
-            any embedded marks are preserved. No open licence or ownership of
-            the pictured work is asserted. Confirm image publication rights,
-            material specifications and availability before deployment.
+            The pre-engineered steel plant, bicycle stand, bollard, bus shelter,
+            cable tray, canopy, corner guard, dustbin, facade, grating, pergola
+            and planter collections use images supplied in dedicated product
+            folders. The original files and any embedded marks are preserved. No
+            open licence or ownership of the pictured work is asserted. Confirm
+            image publication rights, material specifications and availability
+            before deployment.
           </p>
         </Container>
       </section>
