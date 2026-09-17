@@ -41,12 +41,3 @@ export type Project = {
   image?: string;
   gallery?: string[];
 };
-export type Insight = {
-  slug: string;
-  title: string;
-  category: string;
-  description: string;
-  readingTime: string;
-  sections: { title: string; body: string }[];
-  image?: string;
-};

@@ -21,6 +21,8 @@ import {
 import { pageMetadata } from "@/lib/seo";
 import { ReferenceCollection } from "@/components/product/ReferenceCollection";
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return products.map(({ slug }) => ({ slug }));
 }

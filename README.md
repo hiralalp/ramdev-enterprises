@@ -1,6 +1,6 @@
 # Ramdev Enterprises
 
-A responsive industrial website positioning pre-engineered steel plants as the primary business. The active catalogue contains 53 collections in six groups: the approved primary plant offering, 41 collections from the supplied local Ramdev Steel Industries website and 11 additional products backed by owner-supplied photo folders. The 52 secondary collections remain unapproved until owner review. The original 27 proposed products are retained as legacy data. No clients, certifications, case studies, technical ratings or company history have been invented.
+A responsive industrial website positioning pre-engineered steel plants as the primary business. All 53 current collections are approved for publication in six groups: the primary plant offering, 41 collections from the supplied local Ramdev Steel Industries website and 11 additional products backed by owner-supplied photo folders. Future additions require explicit approval. The original 27 proposed products are retained as legacy data. No clients, certifications, case studies, technical ratings or company history have been invented.
 
 ## Stack
 
@@ -8,17 +8,18 @@ Next.js App Router, React, TypeScript, Tailwind CSS, Lucide, React Hook Form and
 
 ## Development
 
-Requires Node.js 20.9 or newer and npm. Use the current Node LTS for deployment.
+Requires Node.js 20.9 or newer and npm for local builds. Use the current Node LTS. Hostinger serves the exported files without Node.js.
 
 ```sh
 npm install
 npm run dev
 npm run lint
 npm run build
+npm run build:hostinger
 npm start
 ```
 
-The local URL is http://localhost:3000. Use `npm run dev -- --port 3001` if needed. Dependencies are pinned by the lockfile; CI can use `npm ci`. Google font downloads must be accessible during the initial production build.
+The development URL is http://localhost:3000. Use `npm run dev -- --port 3001` if needed. `npm start` previews the exported `out/` directory at http://localhost:3002. Dependencies are pinned by the lockfile; CI can use `npm ci`. Google font downloads must be accessible during the initial production build.
 
 ## Environment
 
@@ -26,30 +27,28 @@ Create a local `.env.local` using the keys in `.env.example`. Never commit secre
 
 | Variable                          | Purpose                                                                                              |
 | --------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| `NEXT_PUBLIC_SITE_URL`            | Public canonical URL; set the actual HTTPS domain before production build. Defaults to localhost.    |
+| `NEXT_PUBLIC_SITE_URL`            | Public canonical URL. Production defaults to https://steelwayimpex.com; development defaults to localhost. |
 | `NEXT_PUBLIC_SHOW_DRAFT_PRODUCTS` | Defaults to `false`. Set to `true` only for local `npm run dev` owner review. Ignored in production. |
-| `CONTACT_TO_EMAIL`                | Destination business inbox; defaults to the supplied company email.                                  |
-| `RESEND_API_KEY`                  | Optional server-only Resend credential.                                                              |
-| `CONTACT_FROM_EMAIL`              | Sender address on a verified Resend domain; required for live mail delivery.                         |
 
-Without both mail settings, valid submissions receive HTTP 503 with an honest unavailable message. The form retains entered values and offers an email draft. No uploads are stored. Email attachments directly to the company. Mail integration is isolated in `src/lib/mail.ts`; the API validates input, limits body size, rejects cross-origin browser requests and uses a honeypot. Rate limiting is process-local (five attempts per minute per forwarded IP); configure a trusted proxy and distributed rate limiting or platform firewall before a high-traffic launch. Do not treat that local limiter as a cross-instance security guarantee.
+Contact and quote forms validate locally and open a prepared message at the WhatsApp destination configured in `src/data/company.ts`. All entered business fields are included, including quote-specific quantities, specifications, location and prefilled design references. Visitors must send the message within WhatsApp; the website does not claim delivery. Values remain in the form and an explicit WhatsApp link is available if the new tab is blocked. No WhatsApp API credential or mail configuration is needed for this workflow. No uploads are stored; attachments can be shared separately by email or WhatsApp.
+
+The unused email API and mail helper have been removed for static hosting. Form validation and the honeypot run in the browser; there is no website backend, stored enquiry database or mail-service credential.
 
 ## Content
 
-- `src/data/company.ts`: verified contact information. PAN is never rendered publicly. The supplied phone is incomplete; no call or WhatsApp link is generated.
+- `src/data/company.ts`: verified contact information. PAN is never rendered publicly. Phone, tel: link and WhatsApp link are confirmed and live (footer, mobile sticky bar and the floating WhatsApp button).
 - `src/data/reference-products.ts`: active 41 collections, category and canonical route mapping, specifications, FAQs and approval list.
 - `src/data/reference-catalogue.json`: generated source-page, banner and gallery-image mapping with intrinsic dimensions.
 - `src/data/products.ts`: retained 27 legacy briefs; combines the primary plant offering, reference collections and 11 other photo-backed products into the active catalogue. Unmatched legacy URLs remain accessible in local draft preview.
 - `src/data/supplied-product-photos.json`: generated mapping of 12 product folders and all 222 supplied images, with dimensions and checksums.
 - `src/data/industries.ts`: application areas, not customer claims.
 - `src/data/projects.ts`: intentionally empty until case studies are approved.
-- `src/data/insights.ts`: original general procurement guides.
 - `src/data/navigation.ts`: shared navigation.
 - `src/types/index.ts`: content contracts.
 
 ### Product Approval and Preview
 
-The pre-engineered steel plant is approved because the owner explicitly confirmed it as the company&apos;s primary business. Public listings, navigation, home sections, related products and form suggestions include approved entries only. Unapproved detail URLs return 404 and drafts never enter the sitemap. Reference-site approvals continue to use `approvedCollectionSlugs`; photo-backed entries inherit the approval flag from their product definition.
+The owner requested all current product collections in the public menu. Public listings, navigation, home sections, related products and form suggestions include approved entries only. Unapproved detail URLs return 404 and drafts never enter the sitemap. Reference-site approvals use `approvedCollectionPages`; photo-backed entries use `approvedSuppliedSlugs`.
 
 For local owner review, set `NEXT_PUBLIC_SHOW_DRAFT_PRODUCTS=true` and run the development server. Preview surfaces show Draft badges and an owner-review notice, set `noindex, nofollow`, and disallow crawlers. This is a development preview, not an authenticated admin portal: keep it local. `npm run build` and `npm start` ignore draft preview, even if the flag is accidentally enabled.
 
@@ -61,15 +60,15 @@ $env:NEXT_PUBLIC_SITE_URL = 'http://127.0.0.1:3001'
 npm run dev -- --hostname 127.0.0.1 --port 3001
 ```
 
-After the owner confirms a reference-site collection, review its name, availability, scope, technical copy, FAQs and image publication rights; add its canonical slug to `approvedCollectionSlugs` in `src/data/reference-products.ts`, then rebuild and redeploy. For one of the photo-backed products, set `approved: true` in its product definition in `src/data/products.ts`; its active entry inherits that flag. Approval is per product, not per category. Remove approval and rebuild to withdraw it. Never enable approval merely to populate a page.
+After the owner confirms a new reference-site collection, review its name, availability, scope, technical copy, FAQs and image publication rights; add its source page identifier to `approvedCollectionPages` in `src/data/reference-products.ts`, then rebuild and redeploy. For one of the photo-backed products, add its slug to `approvedSuppliedSlugs` in `src/data/products.ts`. Approval is per product, not per category. Remove approval and rebuild to withdraw it.
 
-The listing, filters, navigation, detail route and sitemap derive from the active catalogue. Collections use photographic banners, image-led cards, a gallery displayed in batches of 24, and a full-screen viewer with zoom, thumbnails and keyboard navigation through Yet Another React Lightbox. Design-specific enquiry links validate the image number server-side and prefill the collection, reference number and image path. Specification guidance, FAQs and related collections follow the gallery. Legacy detail pages retain the original procurement template.
+The listing, filters, navigation, detail route and sitemap derive from the active catalogue. Collections use photographic banners, image-led cards, a gallery displayed in batches of 24, and a full-screen viewer with zoom, thumbnails and keyboard navigation through Yet Another React Lightbox. Design-specific enquiry links validate the image number in the browser against the build-visible catalogue and prefill the collection, reference number and image path. Unapproved product data is not passed to the production form. Specification guidance, FAQs and related collections follow the gallery.
 
 To add an industry, provide its name, slug, description, challenges, applications and relevant product slugs in the industry data. Never imply an existing customer without evidence.
 
-To add a project, add a `Project` record with an approved description, application and images. Until then the list shows the specified empty state and unknown detail URLs return 404.
+The Industries page includes construction and interior design references from the existing supplied image collections. The Projects page presents pre-engineered steel building applications and project-scoping guidance, with photographs explicitly labelled as references rather than completed Ramdev work. Confirm publication rights before deployment.
 
-To add an insight, add a typed article with title, slug, description, category, reading time and sections. Article metadata and JSON-LD are generated from that content. There are no fabricated publication dates.
+To add a completed project, add a `Project` record with an approved description, application and images and restore a detail route with nonempty `generateStaticParams`. The empty project-detail route was removed for static export; unknown detail URLs return 404. Insights and its article routes have been removed and are excluded from navigation and the sitemap.
 
 ## Approved Assets
 
@@ -120,21 +119,22 @@ npm test
 
 Browser tests use installed Google Chrome by default. Set `PLAYWRIGHT_CHANNEL=msedge` to use installed Edge. This avoids downloading a browser where a corporate certificate chain prevents the Playwright download. Do not disable TLS verification.
 
-Browser tests cover the required viewport widths, route metadata, internal links, invalid slugs, menu keyboard behavior, product filtering, RFQ prefilling, client/server validation, honest unconfigured delivery and axe accessibility scans. Tests run against a local Next dev server, or reuse an existing server on port 3000. To test a production build, run `npm run build` and `npm start` first. Set `PLAYWRIGHT_BASE_URL` for another local port. Tests expect mail delivery to be unconfigured; do not run the delivery test against a live production inbox.
+Browser tests cover responsive widths, route metadata, internal links, invalid slugs, keyboard menus, filters, client-side RFQ prefilling, WhatsApp message preparation and axe accessibility. WhatsApp opening is intercepted in the form test so no test enquiry is sent externally. To test exported files, build first and set `PLAYWRIGHT_STATIC_EXPORT=true`, `PLAYWRIGHT_DRAFT_PREVIEW=false`, and `PLAYWRIGHT_BASE_URL=http://localhost:3002`; the test runner can start a plain static server automatically. Otherwise tests use a local Next development server.
 
-The default suite checks approved-only publishing, including all 52 active draft URLs returning 404 and no draft content in client chunks. For a separate local draft-preview server, set `PLAYWRIGHT_BASE_URL` to its URL and `PLAYWRIGHT_DRAFT_PREVIEW=true` when running tests. That mode checks all 52 detail pages, five group filters, design-specific RFQs, gallery pagination, viewer keyboard controls, responsive layouts, accessibility and mobile navigation. The owner-supplied page test checks all 172 new images, all 11 enquiry flows and desktop/mobile accessibility. `tests/catalogue.spec.ts` verifies the 1,691 imported and 172 supplied image checksums, source dimensions and related links, as well as the retained legacy specification and fail-closed policy. The preview test switch only selects expectations; it cannot enable draft publishing in a production server.
+The production publication test checks all 53 current collection routes, sitemap entries, homepage cards and design-specific RFQs. Menu tests verify all six product groups, desktop scrolling and mobile navigation. For a separate local draft-preview server, set `PLAYWRIGHT_BASE_URL` to its URL and `PLAYWRIGHT_DRAFT_PREVIEW=true`; the preview switch cannot enable draft publishing in a production server. `tests/catalogue.spec.ts` verifies imported image checksums, source dimensions and related links, as well as the retained legacy specification and fail-closed policy for unapproved entries.
 
 ## Deployment
 
-Import the repository into Vercel as a Next.js project, set environment variables, and deploy with `npm run build`. Alternatively run the production Node server with `npm start` behind a trusted HTTPS proxy. Set the real site URL before building so canonicals and sitemap use the public domain.
+Run `npm run build:hostinger` to export the approved site for https://steelwayimpex.com and create `deployment/steelwayimpex-hostinger.zip`. Extract the ZIP contents directly into the domain's `public_html` folder. No Node.js process or server environment variables are required on Hostinger. See [HOSTINGER-DEPLOYMENT.md](HOSTINGER-DEPLOYMENT.md) for backup, upload, SSL, cache and verification steps.
+
+Production uses Next.js `output: "export"`, trailing-slash directories and unoptimized local images. Hostinger's Apache/LiteSpeed reads `public/.htaccess` for security headers, directory indexes and the custom 404. Keep all exported Next route payload files alongside the HTML; do not use an SPA catch-all rewrite.
 
 ## Launch Checklist / Known TODOs
 
 - Supply the official logo, favicon, approved hero and product imagery.
 - Approve the catalogue, application copy and all business positioning.
-- Confirm the complete telephone number before enabling telephone or WhatsApp links.
 - Add only real approved projects, certificate assets and technical specifications.
-- Configure and verify the mail provider and sender, then test delivery to the business inbox.
+- Verify the business WhatsApp number and the prepared-message workflow on the deployed domain.
 - Arrange legal review of the privacy and terms starter text and match retention practices to the notice.
-- Configure production rate limiting, monitoring, backups and the final canonical domain.
+- Configure SSL, hosting monitoring, backups and the final canonical domain.
 - Run production Lighthouse checks on the deployed domain. Targets are performance 90+, accessibility 95+, best practices 95+, SEO 95+; scores must be measured, not assumed.

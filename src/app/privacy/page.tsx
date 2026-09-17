@@ -36,12 +36,19 @@ export default function PrivacyPage() {
             </p>
             <h2>Delivery and service providers</h2>
             <p>
-              When online delivery is configured, enquiry details are sent
-              through an email service provider to the business contact inbox.
+              The contact and quote forms prepare a message addressed to our
+              business WhatsApp number. When you continue, the entered details
+              are included in a WhatsApp link and shared with WhatsApp to
+              prepare that message. You decide whether to send it within
+              WhatsApp; opening the link does not confirm delivery to our team.
+              WhatsApp processes this information under its own privacy terms.
+            </p>
+            <p>
               The website hosting provider may process technical information
-              needed to deliver and secure the site. If online delivery is
-              unavailable, the form will state that delivery has not occurred
-              and offer an email option.
+              needed to deliver and secure the site. The forms do not submit
+              enquiry details to the website&apos;s email API. If you contact us
+              by email instead, your email provider processes that
+              correspondence.
             </p>
             <h2>Retention and security</h2>
             <p>
@@ -54,9 +61,9 @@ export default function PrivacyPage() {
             <h2>Cookies and third-party links</h2>
             <p>
               This website does not currently include advertising or analytics
-              trackers. Links to external maps and email applications are
-              governed by the relevant provider&apos;s own practices. External
-              content is not loaded simply by displaying a map link.
+              trackers. Links to WhatsApp, external maps and email applications
+              are governed by the relevant provider&apos;s own practices.
+              External content is not loaded simply by displaying a map link.
             </p>
             <h2>Questions and requests</h2>
             <p>

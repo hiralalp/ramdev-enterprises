@@ -47,7 +47,6 @@ export function Footer() {
                 ["About us", "/about"],
                 ["Quality approach", "/quality"],
                 ["Projects & applications", "/projects"],
-                ["Insights", "/insights"],
                 ["Contact", "/contact"],
               ].map(([label, href]) => (
                 <Link href={href} key={href}>

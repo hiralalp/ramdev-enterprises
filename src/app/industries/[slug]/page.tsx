@@ -10,6 +10,8 @@ import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 import { RelatedProducts } from "@/components/product/ProductDetails";
 import { pageMetadata } from "@/lib/seo";
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return industries.map(({ slug }) => ({ slug }));
 }

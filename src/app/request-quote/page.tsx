@@ -1,31 +1,18 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { Mail, FileText, ArrowUpRight } from "lucide-react";
-import { QuoteForm } from "@/components/forms/QuoteForm";
+import { QuoteRequestForm } from "@/components/forms/QuoteRequestForm";
 import { Container, PageIntro } from "@/components/ui/Primitives";
 import { company } from "@/data/company";
 import { pageMetadata } from "@/lib/seo";
-import { productOptions, findVisibleProduct } from "@/lib/catalogue";
+import { visibleProducts } from "@/lib/catalogue";
 
 export const metadata = pageMetadata(
   "Request a Quote",
   "Share your product, quantity, specification and delivery requirements with Ramdev Enterprises for a requirement-led quotation discussion.",
   "/request-quote",
 );
-export default async function QuotePage({
-  searchParams,
-}: {
-  searchParams: Promise<{ product?: string; design?: string }>;
-}) {
-  const { product, design } = await searchParams;
-  const selected = product ? findVisibleProduct(product) : undefined;
-  const designIndex = Number(design);
-  const selectedImage =
-    selected?.galleryImages && Number.isInteger(designIndex) && designIndex > 0
-      ? selected.galleryImages[designIndex - 1]
-      : undefined;
-  const initialDetails = selectedImage
-    ? `Collection: ${selected!.name}\nDesign reference: ${String(designIndex).padStart(3, "0")}\nImage: ${selectedImage.src}\n\nDimensions:\nQuantity:\nFinish:\nDelivery location:`
-    : "";
+export default function QuotePage() {
   return (
     <>
       <PageIntro
@@ -71,20 +58,15 @@ export default async function QuotePage({
               <ArrowUpRight size={16} />
             </Link>
           </aside>
-          <QuoteForm
-            key={`${product || "general"}-${selectedImage ? designIndex : ""}`}
-            initialProduct={product}
-            initialDetails={initialDetails}
-            products={
-              selected &&
-              !productOptions.some((option) => option.slug === selected.slug)
-                ? [
-                    ...productOptions,
-                    { slug: selected.slug, name: selected.name },
-                  ]
-                : productOptions
-            }
-          />
+          <Suspense fallback={<p role="status">Loading enquiry form...</p>}>
+            <QuoteRequestForm
+              products={visibleProducts.map(({ slug, name, galleryImages }) => ({
+                slug,
+                name,
+                galleryImages: galleryImages?.map(({ src }) => ({ src })),
+              }))}
+            />
+          </Suspense>
         </Container>
       </section>
     </>

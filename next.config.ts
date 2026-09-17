@@ -1,8 +1,13 @@
 import type { NextConfig } from "next";
 
+const staticExport = process.env.NODE_ENV === "production";
+
 const nextConfig: NextConfig = {
+  output: staticExport ? "export" : undefined,
+  trailingSlash: true,
+  images: { unoptimized: true },
   poweredByHeader: false,
-  async headers() {
+  ...(!staticExport && { async headers() {
     return [
       {
         source: "/(.*)",
@@ -17,6 +22,6 @@ const nextConfig: NextConfig = {
         ],
       },
     ];
-  },
+  } }),
 };
 export default nextConfig;

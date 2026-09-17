@@ -1432,6 +1432,21 @@ const preEngineeredSteelPlant: Product = {
   ],
 };
 
+const approvedSuppliedSlugs: readonly string[] = [
+  "pre-engineered-steel-plants",
+  "stainless-steel-bicycle-stands",
+  "stainless-steel-bollards",
+  "stainless-steel-bus-shelters",
+  "cable-trays",
+  "stainless-steel-canopies",
+  "stainless-steel-corner-guards",
+  "stainless-steel-dustbins",
+  "stainless-steel-facades",
+  "stainless-steel-gratings",
+  "stainless-steel-pergolas",
+  "stainless-steel-planters",
+];
+
 export const suppliedProducts: Product[] = suppliedPhotos.map((collection) => {
   const original =
     collection.slug === preEngineeredSteelPlant.slug
@@ -1443,6 +1458,7 @@ export const suppliedProducts: Product[] = suppliedPhotos.map((collection) => {
   );
   return {
     ...original,
+    approved: approvedSuppliedSlugs.includes(collection.slug),
     category:
       collection.slug === preEngineeredSteelPlant.slug
         ? preEngineeredSteelPlant.category

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 export const siteUrl = (
-  process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.NODE_ENV === "production" ? "https://steelwayimpex.com" : "http://localhost:3000")
 ).replace(/\/$/, "");
 export function pageMetadata(
   title: string,

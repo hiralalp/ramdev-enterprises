@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowUpRight, LoaderCircle, Mail } from "lucide-react";
+import { LoaderCircle, MessageCircle } from "lucide-react";
 import { enquirySchema, type Enquiry } from "@/lib/validation";
 import { company } from "@/data/company";
 type ProductOption = { slug: string; name: string };
@@ -20,11 +20,7 @@ export function QuoteForm({
   products?: ProductOption[];
   initialDetails?: string;
 }) {
-  const [result, setResult] = useState<{
-    message: string;
-    sent: boolean;
-  } | null>(null);
-  const [draft, setDraft] = useState("");
+  const [whatsappDraft, setWhatsappDraft] = useState("");
   const {
     register,
     handleSubmit,
@@ -45,35 +41,33 @@ export function QuoteForm({
       website: "",
     },
   });
-  async function submit(values: Enquiry) {
-    setResult(null);
-    const body = Object.entries(values)
-      .filter(([key]) => key !== "website")
-      .map(([key, value]) => `${key}: ${value || "Not provided"}`)
-      .join("\n");
-    setDraft(
-      `mailto:${company.email}?subject=${encodeURIComponent(`Enquiry: ${values.requirement}`)}&body=${encodeURIComponent(body)}`,
-    );
-    try {
-      const response = await fetch("/api/enquiry", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      });
-      const data = await response.json();
-      setResult({
-        message:
-          data.message ||
-          "The enquiry could not be sent. Please contact us by email.",
-        sent: response.ok && data.sent === true,
-      });
-    } catch {
-      setResult({
-        message:
-          "We could not confirm delivery. Your details are still here. Please contact our team by email.",
-        sent: false,
-      });
-    }
+  function submit(values: Enquiry) {
+    const messageFields = [
+      ["Full name", values.name],
+      ["Company name", values.company],
+      ["Email", values.email],
+      ["Phone / WhatsApp", values.phone],
+      ["Requirement", values.requirement],
+      ...(!contact
+        ? [
+            ["Quantity", values.quantity],
+            ["Grade / specification", values.specification],
+            ["Delivery location", values.location],
+          ]
+        : []),
+      ["Requirement details", values.details],
+    ];
+    const message = [
+      `New ${contact ? "contact" : "quote"} enquiry for ${company.name}`,
+      "",
+      ...messageFields.map(
+        ([label, value]) => `${label}: ${value || "Not provided"}`,
+      ),
+    ].join("\n");
+    const url = new URL(company.whatsappHref);
+    url.searchParams.set("text", message);
+    setWhatsappDraft(url.href);
+    window.open(url.href, "_blank", "noopener,noreferrer");
   }
   const fields: {
     name: keyof Enquiry;
@@ -121,7 +115,12 @@ export function QuoteForm({
       : []),
   ];
   return (
-    <form className="enquiry-form" onSubmit={handleSubmit(submit)} noValidate>
+    <form
+      className="enquiry-form"
+      onSubmit={handleSubmit(submit)}
+      onChange={() => setWhatsappDraft("")}
+      noValidate
+    >
       <div className="form-heading">
         <h2>{contact ? "Start a conversation." : "Tell us what you need."}</h2>
         <p>Fields marked * are required.</p>
@@ -199,35 +198,31 @@ export function QuoteForm({
         />
       </div>
       <p className="form-privacy">
-        Your details will be used to respond to your enquiry. Read our{" "}
+        Continuing shares your enquiry details with WhatsApp to prepare a
+        message to our team. Read our{" "}
         <Link href="/privacy">privacy policy</Link>. Drawings and specifications
         can be shared by <a href={`mailto:${company.email}`}>email</a>.
       </p>
       <button className="button" type="submit" disabled={isSubmitting}>
-        {isSubmitting
-          ? "Submitting enquiry"
-          : contact
-            ? "Send your message"
-            : "Send your requirement"}
+        {isSubmitting ? "Preparing message" : "Continue to WhatsApp"}
         {isSubmitting ? (
           <LoaderCircle size={17} className="submitting-icon" />
         ) : (
-          <ArrowUpRight size={17} />
+          <MessageCircle size={17} aria-hidden="true" />
         )}
       </button>
-      {result && (
-        <div
-          className={`form-result ${result.sent ? "result-sent" : "result-unavailable"}`}
-          role="status"
-          aria-live="polite"
-        >
-          <p>{result.message}</p>
-          {!result.sent && (
-            <a className="text-link" href={draft}>
-              <Mail size={16} />
-              Open enquiry in email
-            </a>
-          )}
+      {whatsappDraft && (
+        <div className="form-result" role="status" aria-live="polite">
+          <p>WhatsApp message ready. Sending is completed in WhatsApp.</p>
+          <a
+            className="text-link"
+            href={whatsappDraft}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <MessageCircle size={16} aria-hidden="true" />
+            Open WhatsApp
+          </a>
         </div>
       )}
     </form>

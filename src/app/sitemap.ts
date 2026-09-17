@@ -2,8 +2,9 @@ import type { MetadataRoute } from "next";
 import { approvedProducts as products } from "@/lib/catalogue";
 import { industries } from "@/data/industries";
 import { projects } from "@/data/projects";
-import { insights } from "@/data/insights";
 import { siteUrl } from "@/lib/seo";
+
+export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
@@ -13,7 +14,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/projects",
     "/about",
     "/quality",
-    "/insights",
     "/contact",
     "/request-quote",
     "/privacy",
@@ -21,7 +21,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...products.map((product) => `/products/${product.slug}`),
     ...industries.map((industry) => `/industries/${industry.slug}`),
     ...projects.map((project) => `/projects/${project.slug}`),
-    ...insights.map((insight) => `/insights/${insight.slug}`),
   ].map((path) => ({
     url: `${siteUrl}${path}`,
     changeFrequency: "monthly",

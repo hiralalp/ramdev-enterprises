@@ -4,6 +4,7 @@ import {
   PlantFocus,
   ProductCategories,
   AboutPreview,
+  StatsSection,
   WhyChooseUs,
   ClientsSection,
   FeaturedProducts,
@@ -12,7 +13,7 @@ import {
   FeaturedProjects,
   QualitySection,
   RFQBanner,
-  FaqTestimonialsSection,
+  FaqSection,
   ContactSection,
 } from "@/components/home/Sections";
 import { pageMetadata } from "@/lib/seo";
@@ -30,6 +31,7 @@ export default function Home() {
       <PlantFocus />
       <ProductCategories />
       <AboutPreview />
+      <StatsSection />
       <WhyChooseUs />
       <ClientsSection />
       <FeaturedProducts />
@@ -38,7 +40,7 @@ export default function Home() {
       <FeaturedProjects />
       <QualitySection />
       <RFQBanner />
-      <FaqTestimonialsSection />
+      <FaqSection />
       <ContactSection />
     </>
   );

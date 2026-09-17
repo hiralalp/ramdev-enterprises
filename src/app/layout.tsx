@@ -8,6 +8,8 @@ import "yet-another-react-lightbox/plugins/captions.css";
 import "@/components/product/reference-catalogue.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { ScrollProgress } from "@/components/layout/ScrollProgress";
+import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import { JsonLd } from "@/components/ui/Primitives";
 import { company } from "@/data/company";
 import { siteUrl } from "@/lib/seo";
@@ -40,14 +42,21 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="no-js">
       <body className={`${heading.variable} ${body.variable}`}>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "document.documentElement.classList.remove('no-js')",
+          }}
+        />
+        <ScrollProgress />
         <a className="skip-link" href="#main">
           Skip to content
         </a>
         <Header />
         <main id="main">{children}</main>
         <Footer />
+        <WhatsAppButton />
         <JsonLd
           data={{
             "@context": "https://schema.org",

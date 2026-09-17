@@ -24,12 +24,13 @@ import {
   RFQBanner,
 } from "@/components/ui/Primitives";
 import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
+import { Reveal } from "@/components/ui/Reveal";
+import { StatCounter } from "./StatCounter";
 import { ProductCard } from "@/components/product/ProductCard";
 import { ProjectCard, ProjectsEmpty } from "@/components/project/ProjectCard";
 import { visibleProducts as products } from "@/lib/catalogue";
 import { CatalogueEmpty } from "@/components/product/CatalogueEmpty";
 import { industries } from "@/data/industries";
-import { insights } from "@/data/insights";
 import { projects } from "@/data/projects";
 import { company, mapUrl } from "@/data/company";
 import { clients } from "@/data/clients";
@@ -91,7 +92,7 @@ export function PlantFocus() {
   return (
     <section className="section plant-focus">
       <Container>
-        <div className="plant-focus-copy">
+        <Reveal className="plant-focus-copy">
           <p className="eyebrow">
             <span />
             PRIMARY BUSINESS
@@ -123,8 +124,8 @@ export function PlantFocus() {
           <Button href="/products/pre-engineered-steel-plants">
             View plant capabilities
           </Button>
-        </div>
-        <div className="plant-focus-visual">
+        </Reveal>
+        <Reveal className="plant-focus-visual">
           <Image
             src="/images/pre engineered steel plant/main-framing.jpg"
             alt="Reference view of structural steel framing for an industrial building"
@@ -132,7 +133,7 @@ export function PlantFocus() {
             sizes="(max-width: 900px) 100vw, 55vw"
           />
           <span>STRUCTURAL SYSTEM / REFERENCE IMAGE</span>
-        </div>
+        </Reveal>
       </Container>
     </section>
   );
@@ -149,11 +150,11 @@ export function ProductCategories() {
           description="Beyond pre-engineered steel plants, explore stainless-steel, architectural and interior product collections."
         />
         {!products.length && <CatalogueEmpty />}
-        <div className="product-grid">
+        <Reveal stagger className="product-grid">
           {products.slice(0, 3).map((product, index) => (
             <ProductCard key={product.slug} product={product} index={index} />
           ))}
-        </div>
+        </Reveal>
         <div className="category-links">
           {products.slice(3, 6).map((product) => (
             <Link href={`/products/${product.slug}`} key={product.slug}>
@@ -170,7 +171,7 @@ export function AboutPreview() {
   return (
     <section className="section surface">
       <Container className="split-section">
-        <div className="about-visual">
+        <Reveal className="about-visual">
           <ImagePlaceholder
             src="/images/pre engineered steel plant/low-angle-view-scafolding-building-scaled.jpg"
             alt="Reference view of a steel building frame under construction"
@@ -184,8 +185,8 @@ export function AboutPreview() {
               <span>Building for industrial requirements.</span>
             </div>
           </div>
-        </div>
-        <div className="section-copy">
+        </Reveal>
+        <Reveal className="section-copy">
           <p className="eyebrow">
             <span />
             ABOUT RAMDEV ENTERPRISES
@@ -219,7 +220,29 @@ export function AboutPreview() {
             Get to know us
             <ArrowUpRight size={18} />
           </Link>
-        </div>
+        </Reveal>
+      </Container>
+    </section>
+  );
+}
+const stats = [
+  { value: 80, label: "Expat workers" },
+  { value: 20, label: "Years experience" },
+  { value: 40, label: "Completed projects" },
+  { value: 22, label: "Running projects" },
+];
+export function StatsSection() {
+  return (
+    <section className="section stats-section">
+      <Container>
+        <Reveal stagger className="stats-grid">
+          {stats.map((stat) => (
+            <div key={stat.label} className="stat-item">
+              <StatCounter value={stat.value} />
+              <span className="stat-label">{stat.label}</span>
+            </div>
+          ))}
+        </Reveal>
       </Container>
     </section>
   );
@@ -254,7 +277,7 @@ export function WhyChooseUs() {
           eyebrow="THE RAMDEV APPROACH"
           title="One building system. Many coordinated decisions."
         />
-        <div className="reason-grid">
+        <Reveal stagger className="reason-grid">
           {reasons.map((reason, index) => (
             <article key={reason.title}>
               <div className="reason-top">
@@ -265,7 +288,7 @@ export function WhyChooseUs() {
               <p>{reason.text}</p>
             </article>
           ))}
-        </div>
+        </Reveal>
       </Container>
     </section>
   );
@@ -277,15 +300,21 @@ export function ClientsSection() {
         <SectionHeading
           eyebrow="BUILDERS & DEVELOPERS WE HAVE WORKED WITH"
           title="Trusted by builders, developers and project teams."
-          description="Official client logo artwork will be added once each company confirms usage. Names are listed as supplied."
         />
-        <ul className="clients-grid">
-          {clients.map((clientName) => (
-            <li key={clientName} className="client-tile">
-              <span>{clientName}</span>
-            </li>
-          ))}
-        </ul>
+        <Reveal>
+          <ul className="clients-grid">
+            {clients.map((client) => (
+              <li key={client.name} className="client-tile">
+                <Image
+                  src={client.logo}
+                  alt={client.name}
+                  fill
+                  sizes="(max-width: 600px) 33vw, (max-width: 900px) 25vw, 160px"
+                />
+              </li>
+            ))}
+          </ul>
+        </Reveal>
       </Container>
     </section>
   );
@@ -302,7 +331,7 @@ export function FeaturedProducts() {
           href="/products"
           linkLabel="View all categories"
         />
-        <div className="product-grid">
+        <Reveal stagger className="product-grid">
           {featured.map((product, index) => (
             <ProductCard
               key={product.slug}
@@ -310,7 +339,7 @@ export function FeaturedProducts() {
               index={index + 3}
             />
           ))}
-        </div>
+        </Reveal>
       </Container>
     </section>
   );
@@ -327,7 +356,7 @@ export function IndustriesSection() {
           linkLabel="View applications"
           description="Manufacturing, warehousing, engineering and process-support buildings each begin with different operational inputs."
         />
-        <div className="industry-grid">
+        <Reveal stagger className="industry-grid">
           {industries.map((industry, index) => {
             const Icon = industryIcons[index];
             return (
@@ -344,7 +373,7 @@ export function IndustriesSection() {
               </Link>
             );
           })}
-        </div>
+        </Reveal>
       </Container>
     </section>
   );
@@ -353,7 +382,7 @@ export function CapabilitiesSection() {
   return (
     <section className="section">
       <Container className="split-section">
-        <div className="section-copy">
+        <Reveal className="section-copy">
           <p className="eyebrow">
             <span />
             FROM BRIEF TO BUILDING SCOPE
@@ -370,36 +399,38 @@ export function CapabilitiesSection() {
           <Button href="/request-quote" secondary>
             Discuss your requirement
           </Button>
-        </div>
-        <ol className="process-list">
-          {[
-            [
-              "Define the operation",
-              "Building use, site, process flow, equipment and access needs.",
-            ],
-            [
-              "Set the building inputs",
-              "Length, width, height, spans, loads, openings and envelope requirements.",
-            ],
-            [
-              "Coordinate the system",
-              "Review framing, roofing, cladding, interfaces and execution responsibilities.",
-            ],
-            [
-              "Confirm project scope",
-              "Agree drawings, supply, erection, schedule and commercial boundaries.",
-            ],
-          ].map(([title, text], index) => (
-            <li key={title}>
-              <span>0{index + 1}</span>
-              <div>
-                <h3>{title}</h3>
-                <p>{text}</p>
-              </div>
-              <MoveUpRight size={17} aria-hidden="true" />
-            </li>
-          ))}
-        </ol>
+        </Reveal>
+        <Reveal>
+          <ol className="process-list">
+            {[
+              [
+                "Define the operation",
+                "Building use, site, process flow, equipment and access needs.",
+              ],
+              [
+                "Set the building inputs",
+                "Length, width, height, spans, loads, openings and envelope requirements.",
+              ],
+              [
+                "Coordinate the system",
+                "Review framing, roofing, cladding, interfaces and execution responsibilities.",
+              ],
+              [
+                "Confirm project scope",
+                "Agree drawings, supply, erection, schedule and commercial boundaries.",
+              ],
+            ].map(([title, text], index) => (
+              <li key={title}>
+                <span>0{index + 1}</span>
+                <div>
+                  <h3>{title}</h3>
+                  <p>{text}</p>
+                </div>
+                <MoveUpRight size={17} aria-hidden="true" />
+              </li>
+            ))}
+          </ol>
+        </Reveal>
       </Container>
     </section>
   );
@@ -415,11 +446,11 @@ export function FeaturedProjects() {
           linkLabel="View applications"
         />
         {projects.length ? (
-          <div className="product-grid">
+          <Reveal stagger className="product-grid">
             {projects.slice(0, 3).map((project) => (
               <ProjectCard project={project} key={project.slug} />
             ))}
-          </div>
+          </Reveal>
         ) : (
           <ProjectsEmpty />
         )}
@@ -431,7 +462,7 @@ export function QualitySection() {
   return (
     <section className="section">
       <Container className="split-section quality-preview">
-        <div>
+        <Reveal>
           <p className="eyebrow">
             <span />
             QUALITY IN THE DETAILS
@@ -445,8 +476,8 @@ export function QualitySection() {
             Our quality approach
             <ArrowUpRight size={18} />
           </Link>
-        </div>
-        <div>
+        </Reveal>
+        <Reveal>
           <p>
             Material suitability starts with a clear understanding of the
             specification. Our quality approach focuses on the details that can
@@ -465,49 +496,7 @@ export function QualitySection() {
               </li>
             ))}
           </ul>
-        </div>
-      </Container>
-    </section>
-  );
-}
-export function InsightsSection() {
-  return (
-    <section className="section">
-      <Container>
-        <SectionHeading
-          eyebrow="NOTES & PERSPECTIVES"
-          title="A little clarity goes a long way."
-          href="/insights"
-          linkLabel="All insights"
-        />
-        <div className="insight-grid">
-          {insights.map((insight, index) => (
-            <article className="insight-card" key={insight.slug}>
-              <Link href={`/insights/${insight.slug}`}>
-                <div
-                  className={`insight-art insight-art-${index}`}
-                  aria-hidden="true"
-                >
-                  <span>
-                    FIELD
-                    <br />
-                    NOTES<span>0{index + 1}</span>
-                  </span>
-                  <ArrowUpRight size={45} strokeWidth={0.8} />
-                </div>
-                <p className="insight-meta">
-                  {insight.category}
-                  <span>{insight.readingTime}</span>
-                </p>
-                <h3>{insight.title}</h3>
-                <span className="text-link">
-                  Read article
-                  <ArrowUpRight size={15} />
-                </span>
-              </Link>
-            </article>
-          ))}
-        </div>
+        </Reveal>
       </Container>
     </section>
   );
@@ -534,49 +523,25 @@ const homepageFaqs = [
       "Send the available site information, drawings, operational requirements and schedule. The initial review identifies missing inputs and defines the next technical and commercial discussion.",
   },
 ];
-export function FaqTestimonialsSection() {
+export function FaqSection() {
   return (
-    <section className="section faq-testimonials-section">
-      <Container className="faq-testimonials-layout">
-        <div className="homepage-faqs">
-          <p className="eyebrow">
-            <span />
-            FREQUENTLY ASKED QUESTIONS
-          </p>
-          <h2>Useful answers before the first discussion.</h2>
-          <div className="homepage-faq-list">
-            {homepageFaqs.map(({ question, answer }, index) => (
-              <details key={question} open={index === 0}>
-                <summary>
-                  <span>{question}</span>
-                  <span className="faq-toggle" aria-hidden="true" />
-                </summary>
-                <p>{answer}</p>
-              </details>
-            ))}
-          </div>
-        </div>
-        <aside className="testimonial-panel" aria-labelledby="client-voices">
-          <p className="eyebrow">
-            <span />
-            CLIENT VOICES
-          </p>
-          <div className="testimonial-mark" aria-hidden="true">
-            &ldquo;
-          </div>
-          <h2 id="client-voices">Project experience, in the client&apos;s words.</h2>
-          <p>
-            Approved client testimonials will appear here once the wording,
-            attribution and project context are confirmed for publication.
-          </p>
-          <a
-            className="text-link testimonial-link"
-            href={`mailto:${company.email}?subject=Project%20feedback`}
-          >
-            Share project feedback
-            <ArrowUpRight size={17} aria-hidden="true" />
-          </a>
-        </aside>
+    <section className="section faq-section">
+      <Container>
+        <SectionHeading
+          eyebrow="FREQUENTLY ASKED QUESTIONS"
+          title="Useful answers before the first discussion."
+        />
+        <Reveal stagger className="homepage-faq-list">
+          {homepageFaqs.map(({ question, answer }, index) => (
+            <details key={question} open={index === 0}>
+              <summary>
+                <span>{question}</span>
+                <span className="faq-toggle" aria-hidden="true" />
+              </summary>
+              <p>{answer}</p>
+            </details>
+          ))}
+        </Reveal>
       </Container>
     </section>
   );
@@ -585,7 +550,7 @@ export function ContactSection() {
   return (
     <section className="section surface">
       <Container className="split-section">
-        <div className="section-copy">
+        <Reveal className="section-copy">
           <p className="eyebrow">
             <span />
             LET&apos;S CONNECT
@@ -606,13 +571,14 @@ export function ContactSection() {
           <Button href="/contact" secondary>
             Contact our team
           </Button>
-        </div>
-        <a
-          className="location-panel"
-          href={mapUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        </Reveal>
+        <Reveal>
+          <a
+            className="location-panel"
+            href={mapUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
           <div className="map-grid" aria-hidden="true">
             <LocateFixed size={44} strokeWidth={1} />
           </div>
@@ -632,6 +598,7 @@ export function ContactSection() {
             </span>
           </div>
         </a>
+        </Reveal>
       </Container>
     </section>
   );

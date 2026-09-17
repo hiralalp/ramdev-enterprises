@@ -2,7 +2,6 @@ import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { products } from "../src/data/products";
 import { industries } from "../src/data/industries";
-import { insights } from "../src/data/insights";
 import { catalogueCategories } from "../src/data/products";
 import { photoCredits } from "../src/lib/photo-credits";
 
@@ -19,14 +18,12 @@ const routes = [
   "/projects",
   "/about",
   "/quality",
-  "/insights",
   "/contact",
   "/request-quote",
   "/privacy",
   "/terms",
   ...publishedProducts.map((item) => `/products/${item.slug}`),
   ...industries.map((item) => `/industries/${item.slug}`),
-  ...insights.map((item) => `/insights/${item.slug}`),
 ];
 const widths = [375, 390, 430, 768, 1024, 1280, 1440, 1920];
 const enquiry = {
@@ -60,7 +57,7 @@ test("all routes, metadata, local links and required responsive widths", async (
     );
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
       "href",
-      new RegExp(`${route === "/" ? "/?" : route}$`),
+      new RegExp(`${route === "/" ? "" : route}/?$`),
     );
     await expect(page.locator('meta[property="og:title"]')).toHaveAttribute(
       "content",
@@ -73,11 +70,7 @@ test("all routes, metadata, local links and required responsive widths", async (
     expect(await page.locator("body").innerText()).not.toMatch(
       /lorem ipsum|DVEPK6522D(?!1ZX)|TODO_CONTENT|TODO_ASSET/i,
     );
-    expect(
-      await page
-        .locator('a[href="#"], a[href^="tel:"], a[href*="wa.me"]')
-        .count(),
-    ).toBe(0);
+    expect(await page.locator('a[href="#"]').count()).toBe(0);
     for (const link of await page
       .locator("a[href]")
       .evaluateAll((elements) =>
@@ -140,25 +133,20 @@ test("homepage screenshots, imagery and accessible landmarks", async ({
   ).toBeVisible();
   await expect(
     page.getByRole("link", { name: "View plant capabilities", exact: true }),
-  ).toHaveAttribute("href", "/products/pre-engineered-steel-plants");
+  ).toHaveAttribute("href", /^\/products\/pre-engineered-steel-plants\/?$/);
   await expect(
     page.getByRole("heading", {
       name: "Useful answers before the first discussion.",
     }),
   ).toBeVisible();
   await expect(page.locator(".homepage-faq-list details")).toHaveCount(4);
-  await expect(
-    page.getByRole("heading", {
-      name: "Project experience, in the client's words.",
-    }),
-  ).toBeVisible();
-  await expect(page.locator(".insight-grid")).toHaveCount(0);
+  await expect(page.locator('a[href^="/insights"]')).toHaveCount(0);
   await expect(
     page.getByRole("heading", {
       name: "Trusted by builders, developers and project teams.",
     }),
   ).toBeVisible();
-  await expect(page.locator(".client-tile")).toHaveCount(35);
+  await expect(page.locator(".client-tile")).toHaveCount(34);
   expect(
     await page
       .locator('.hero-slide[data-active="true"] .hero-art')
@@ -194,6 +182,116 @@ test("homepage screenshots, imagery and accessible landmarks", async ({
     path: "test-results/home-mobile-viewport.png",
     animations: "disabled",
   });
+});
+
+test("construction and interiors photos, steel plant project content and removed Insights routes", async ({ page, request }) => {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  for (const route of ["/industries", "/projects"]) {
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 900 });
+      expect((await page.goto(route))?.status()).toBe(200);
+      const photos = page.locator(".application-photo img");
+      await expect(photos).toHaveCount(3);
+      for (const photo of await photos.all()) {
+        await photo.scrollIntoViewIfNeeded();
+        await expect(photo).toHaveAttribute("alt", /.+/);
+        await expect.poll(() => photo.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+        await expect(photo.locator("xpath=ancestor::div[contains(@class, 'reveal')]")).toHaveCSS("opacity", "1");
+      }
+      await expect(page.locator('a[href^="/insights"]')).toHaveCount(0);
+      if (route === "/industries") {
+        await expect(page.getByRole("heading", { name: "Interiors & architectural metalwork" })).toBeVisible();
+      } else {
+        await expect(page.getByRole("heading", { name: "Warehouses & logistics buildings" })).toBeVisible();
+        await expect(page.locator('.application-band a[href^="/request-quote"][href$="?product=pre-engineered-steel-plants"]')).toHaveCount(3);
+      }
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+      const accessibility = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
+      expect(accessibility.violations).toEqual([]);
+      await page.screenshot({ path: `test-results/${route.slice(1)}-${width}.png`, fullPage: true, animations: "disabled" });
+    }
+  }
+  for (const route of ["/insights", "/insights/preparing-a-material-enquiry", "/insights/reading-material-specifications", "/insights/planning-project-procurement"]) {
+    expect((await request.get(route)).status(), route).toBe(404);
+  }
+  expect(await (await request.get("/sitemap.xml")).text()).not.toContain("/insights");
+  expect(errors).toEqual([]);
+});
+
+test("expanded About and Quality content, links and accessible FAQs", async ({
+  page,
+  request,
+}) => {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  for (const route of ["/about", "/quality"]) {
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 900 });
+      expect((await page.goto(route))?.status()).toBe(200);
+      await expect(page.locator("h1")).toHaveCount(1);
+      for (const region of await page.locator(".reveal").all()) {
+        await region.scrollIntoViewIfNeeded();
+        await expect(region).toHaveCSS("opacity", "1");
+      }
+      if (route === "/about") {
+        await expect(page.getByRole("heading", {
+          name: "The building, the operation and the details between.",
+        })).toBeVisible();
+        await expect(page.locator(".quality-grid article")).toHaveCount(3);
+        await expect(page.getByRole("link", { name: "Share your building brief" }))
+          .toHaveAttribute("href", /^\/request-quote\/?\?product=pre-engineered-steel-plants$/);
+      } else {
+        await expect(page.locator(".quality-grid article")).toHaveCount(6);
+        await expect(page.getByRole("heading", {
+          name: "Make the evidence part of the enquiry.",
+        })).toBeVisible();
+        const photo = page.getByRole("img", { name: /Reference steel building frame/ });
+        await expect.poll(() => photo.evaluate(
+          (image) => (image as HTMLImageElement).naturalWidth,
+        )).toBeGreaterThan(0);
+        const questions = page.locator(".homepage-faq-list details");
+        await expect(questions).toHaveCount(4);
+        for (const question of await questions.all()) {
+          const summary = question.locator("summary");
+          await summary.focus();
+          await summary.press("Enter");
+          await expect(question).toHaveAttribute("open", "");
+          await expect(question.locator("p")).toBeVisible();
+          await summary.press("Enter");
+          await expect(question).not.toHaveAttribute("open", "");
+        }
+        await expect(page.getByRole("link", { name: "Discuss quality requirements" }))
+          .toHaveAttribute("href", /^\/request-quote\/?\?product=pre-engineered-steel-plants$/);
+      }
+      expect(await page.evaluate(
+        () => document.documentElement.scrollWidth <= window.innerWidth,
+      )).toBe(true);
+      const overflowingText = await page.locator("h1, h2, h3, .button")
+        .evaluateAll((elements) => elements.filter(
+          (element) => element.clientWidth > 0 && element.scrollWidth > element.clientWidth + 2,
+        ).map((element) => element.textContent));
+      expect(overflowingText).toEqual([]);
+      const accessibility = await new AxeBuilder({ page })
+        .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
+        .analyze();
+      expect(accessibility.violations).toEqual([]);
+      await page.evaluate(() => {
+        if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+        window.scrollTo({ top: 0, behavior: "instant" });
+      });
+      await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+      await page.screenshot({
+        path: `test-results/${route.slice(1)}-expanded-${width}.png`,
+        fullPage: true,
+        animations: "disabled",
+      });
+    }
+  }
+  for (const href of ["/projects", "/products/pre-engineered-steel-plants", "/request-quote?product=pre-engineered-steel-plants"]) {
+    expect((await request.get(href)).status()).toBe(200);
+  }
+  expect(errors).toEqual([]);
 });
 
 test("homepage banners rotate, pause and remain responsive", async ({
@@ -267,7 +365,7 @@ test("pre-engineered steel plant is the primary homepage and catalogue offering"
   await page
     .getByRole("link", { name: "Explore the solution", exact: true })
     .click();
-  await expect(page).toHaveURL("/products/pre-engineered-steel-plants");
+  await expect(page).toHaveURL(/\/products\/pre-engineered-steel-plants\/?$/);
   await expect(page.locator("h1")).toHaveText("Pre-Engineered Steel Plants");
   await expect(page.locator(".collection-strip")).toContainText(
     "50 design references",
@@ -288,11 +386,54 @@ test("keyboard menus, modal focus containment and navigation", async ({
   page,
 }) => {
   await page.goto("/");
+  for (const width of [1024, 1041, 1199, 1280, 1366, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await expect(page.getByRole("navigation", { name: "Main navigation", exact: true })).toBeVisible();
+    for (const label of ["Industries", "Projects", "About", "Quality", "Contact"]) {
+      await expect(page.locator(".desktop-nav").getByRole("link", { name: label, exact: true })).toBeVisible();
+    }
+    await expect(page.locator(".header-quote")).toBeVisible();
+    await expect(page.getByRole("button", { name: "Open navigation" })).not.toBeVisible();
+    const fits = await page.locator(".site-header > .container").evaluate((container) => {
+      const bounds = container.getBoundingClientRect();
+      const items = Array.from(container.children)
+        .filter((element) => getComputedStyle(element).display !== "none")
+        .map((element) => element.getBoundingClientRect());
+      return items.every((item, index) => item.left >= bounds.left && item.right <= bounds.right &&
+        (index === 0 || item.left >= items[index - 1].right));
+    });
+    expect(fits, `Header fits without overlap at ${width}px`).toBe(true);
+  }
+  await page.setViewportSize({ width: 1041, height: 900 });
+  await page.locator(".site-header").screenshot({ path: "test-results/header-laptop-1041.png" });
   const productsTrigger = page.getByRole("button", {
     name: "Products",
     exact: true,
   });
   if (publishedProducts.length) {
+    for (const width of [1024, 1041, 1440]) {
+      await page.setViewportSize({ width, height: 768 });
+      await productsTrigger.click();
+      const menu = page.locator("#product-menu");
+      await expect(menu.locator(".mega-group")).toHaveCount(catalogueCategories.length);
+      await expect(menu.locator(".mega-links a")).toHaveCount(publishedProducts.length);
+      const hrefs = await menu.locator(".mega-links a").evaluateAll((links) => links.map((link) => new URL((link as HTMLAnchorElement).href).pathname.replace(/\/$/, "")));
+      expect(hrefs.sort()).toEqual(publishedProducts.map((product) => `/products/${product.slug}`).sort());
+      const fits = await menu.evaluate((element) => {
+        const bounds = element.getBoundingClientRect();
+        return bounds.bottom <= window.innerHeight && bounds.left >= 0 && bounds.right <= window.innerWidth && element.scrollWidth <= element.clientWidth;
+      });
+      expect(fits, `Dropdown stays inside ${width}px viewport`).toBe(true);
+      const lastLink = menu.locator(".mega-links a").last();
+      await lastLink.focus();
+      await expect(lastLink).toBeInViewport();
+      await menu.evaluate((element) => { element.scrollTop = 0; });
+      await page.screenshot({ path: `test-results/all-products-menu-${width}.png` });
+      const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
+      expect(results.violations).toEqual([]);
+      await page.keyboard.press("Escape");
+      await expect(productsTrigger).toBeFocused();
+    }
     await productsTrigger.focus();
     await page.keyboard.press("Enter");
     await expect(page.locator("#product-menu")).toBeVisible();
@@ -300,9 +441,21 @@ test("keyboard menus, modal focus containment and navigation", async ({
     await expect(productsTrigger).toBeFocused();
     await expect(page.locator("#product-menu")).toHaveCount(0);
   }
+  await page.setViewportSize({ width: 1023, height: 900 });
+  await expect(page.locator(".desktop-nav")).not.toBeVisible();
+  await expect(page.getByRole("button", { name: "Open navigation" })).toBeVisible();
   await page.setViewportSize({ width: 390, height: 844 });
   await page.getByRole("button", { name: "Open navigation" }).click();
   await expect(page.getByRole("dialog")).toBeVisible();
+  await page.locator(".mobile-product-groups > summary").click();
+  for (const summary of await page.locator(".mobile-product-groups > details > summary").all()) {
+    await summary.click();
+  }
+  await expect(page.locator(".mobile-product-groups a")).toHaveCount(publishedProducts.length);
+  const lastMobileProduct = page.locator(".mobile-product-groups a").last();
+  await lastMobileProduct.focus();
+  await expect(lastMobileProduct).toBeInViewport();
+  await page.locator(".mobile-dialog").screenshot({ path: "test-results/all-products-menu-mobile.png" });
   const menuAccessibility = await new AxeBuilder({ page })
     .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
     .analyze();
@@ -326,7 +479,7 @@ test("keyboard menus, modal focus containment and navigation", async ({
     .getByRole("dialog")
     .getByRole("link", { name: "Products", exact: true })
     .click();
-  await expect(page).toHaveURL(/\/products$/);
+  await expect(page).toHaveURL(/\/products\/?$/);
   expect(await page.evaluate(() => document.body.style.overflow)).not.toBe(
     "hidden",
   );
@@ -373,97 +526,124 @@ test("product filters, no-results state and prefilling", async ({ page }) => {
   );
 });
 
-test("form validation and honest unconfigured delivery", async ({ page }) => {
-  await page.goto("/request-quote");
-  await page.getByRole("button", { name: "Send your requirement" }).click();
-  await expect(
-    page.getByText("Enter your full name.", { exact: true }),
-  ).toBeVisible();
-  await expect(page.getByLabel("Full name")).toBeFocused();
-  await page.getByLabel("Full name").fill(enquiry.name);
-  await page.getByLabel("Email", { exact: false }).fill(enquiry.email);
-  await page.getByLabel("Product / requirement").fill(enquiry.requirement);
-  await page.getByLabel("Requirement details").fill(enquiry.details);
-  await page.getByRole("button", { name: "Send your requirement" }).click();
-  await expect(page.getByRole("status")).toContainText(
-    "Your enquiry has not been sent",
-  );
-  await expect(
-    page.getByRole("link", { name: "Open enquiry in email" }),
-  ).toHaveAttribute("href", /^mailto:/);
-  await expect(page.getByLabel("Full name")).toHaveValue(enquiry.name);
+test("contact and quote forms validate and prepare complete WhatsApp messages", async ({ page }) => {
+  const apiCalls: string[] = [];
+  page.on("request", (request) => {
+    if (new URL(request.url()).pathname === "/api/enquiry") apiCalls.push(request.url());
+  });
+  await page.addInitScript(() => {
+    window.open = (url, target, features) => {
+      document.documentElement.dataset.whatsappUrl = String(url);
+      document.documentElement.dataset.whatsappTarget = target;
+      document.documentElement.dataset.whatsappFeatures = features;
+      return null;
+    };
+  });
+  const companyName = "R&D + Fabrication #1";
+  const details = "Plant enquiry: 40m x 20m.\nRoof & wall panels + drawings #2?";
+  for (const route of ["/contact", "/request-quote"]) {
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(route);
+      const submit = page.getByRole("button", { name: "Continue to WhatsApp" });
+      await submit.click();
+      await expect(page.getByText("Enter your full name.", { exact: true })).toBeVisible();
+      await expect(page.getByLabel("Full name")).toBeFocused();
+      await expect(page.locator("html")).not.toHaveAttribute("data-whatsapp-url");
+      await page.getByLabel("Full name").fill(enquiry.name);
+      await page.getByLabel("Company name").fill(companyName);
+      await page.getByLabel("Email", { exact: false }).fill(enquiry.email);
+      await page.getByLabel("Phone / WhatsApp").fill("+91 90000 00000");
+      await page.getByLabel(route === "/contact" ? "Subject / requirement" : "Product / requirement").fill(enquiry.requirement);
+      await page.getByLabel("Requirement details").fill(details);
+      if (route === "/request-quote") {
+        await page.getByLabel("Quantity").fill(enquiry.quantity);
+        await page.getByLabel("Grade / specification").fill(enquiry.specification);
+        await page.getByLabel("Delivery location").fill(enquiry.location);
+      }
+      await submit.click();
+      await expect(page.getByRole("status")).toContainText("WhatsApp message ready");
+      const fallback = page.getByRole("link", { name: "Open WhatsApp", exact: true });
+      const href = await fallback.getAttribute("href");
+      const url = new URL(href!);
+      expect(url.origin + url.pathname).toBe("https://wa.me/919176507264");
+      const message = url.searchParams.get("text");
+      for (const value of [enquiry.name, companyName, enquiry.email, "+91 90000 00000", enquiry.requirement, details]) {
+        expect(message).toContain(value);
+      }
+      if (route === "/request-quote") {
+        for (const value of [enquiry.quantity, enquiry.specification, enquiry.location]) expect(message).toContain(value);
+      } else {
+        expect(message).not.toContain("Quantity:");
+      }
+      expect(message).not.toContain("website:");
+      await expect(page.locator("html")).toHaveAttribute("data-whatsapp-url", href!);
+      await expect(page.locator("html")).toHaveAttribute("data-whatsapp-target", "_blank");
+      await expect(page.locator("html")).toHaveAttribute("data-whatsapp-features", "noopener,noreferrer");
+      await expect(fallback).toHaveAttribute("target", "_blank");
+      await expect(fallback).toHaveAttribute("rel", "noopener noreferrer");
+      await expect(page.getByLabel("Full name")).toHaveValue(enquiry.name);
+      await page.getByLabel("Requirement details").fill(`${details}\nUpdated scope.`);
+      await expect(fallback).toHaveCount(0);
+      await submit.click();
+      expect(new URL((await fallback.getAttribute("href"))!).searchParams.get("text")).toContain("Updated scope.");
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+      const accessibility = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
+      expect(accessibility.violations).toEqual([]);
+      await page.locator(".enquiry-form").screenshot({ path: `test-results/whatsapp-${route.slice(1)}-${width}.png` });
+    }
+  }
+  expect(apiCalls).toEqual([]);
 });
 
-test("API validation, origin checks, size bounds and rate limiting", async ({
+test("static deployment has no enquiry backend", async ({
   request,
 }) => {
-  const invalid = await request.post("/api/enquiry", {
-    data: { ...enquiry, email: "invalid" },
-    headers: { "x-forwarded-for": "qa-invalid" },
-  });
-  expect(invalid.status()).toBe(400);
-  expect(
-    (
-      await request.post("/api/enquiry", {
-        data: enquiry,
-        headers: {
-          origin: "https://unrelated.example",
-          "x-forwarded-for": "qa-origin",
-        },
-      })
-    ).status(),
-  ).toBe(403);
-  expect(
-    (
-      await request.post("/api/enquiry", {
-        data: { ...enquiry, details: "x".repeat(17000) },
-        headers: { "x-forwarded-for": "qa-size" },
-      })
-    ).status(),
-  ).toBe(413);
-  expect(
-    (
-      await request.post("/api/enquiry", {
-        data: { ...enquiry, website: "spam" },
-        headers: { "x-forwarded-for": "qa-honeypot" },
-      })
-    ).status(),
-  ).toBe(400);
-  expect(
-    (
-      await request.post("/api/enquiry", {
-        data: enquiry,
-        headers: { "x-forwarded-for": "qa-mail" },
-      })
-    ).status(),
-  ).toBe(503);
-  const key = `qa-rate-${Date.now()}`;
-  for (let index = 0; index < 5; index++)
-    await request.post("/api/enquiry", {
-      data: {},
-      headers: { "x-forwarded-for": key },
-    });
-  expect(
-    (
-      await request.post("/api/enquiry", {
-        data: {},
-        headers: { "x-forwarded-for": key },
-      })
-    ).status(),
-  ).toBe(429);
+  expect((await request.get("/api/enquiry/")).status()).toBe(404);
+});
+
+test("static export preserves quote design links and production metadata", async ({ page, request }) => {
+  test.skip(process.env.PLAYWRIGHT_STATIC_EXPORT !== "true", "Static export verification.");
+  const product = products.find((item) => item.slug === "pre-engineered-steel-plants")!;
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(`/products/${product.slug}/`);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /^https:\/\/steelwayimpex\.com\/products\/pre-engineered-steel-plants\/?$/);
+    const designLink = page.locator(`a[href*="product=${product.slug}&design=1"]`).first();
+    await designLink.click();
+    await expect(page.getByLabel("Product / requirement")).toHaveValue(product.name);
+    await expect(page.getByLabel("Requirement details")).toHaveValue(/Design reference: 001/);
+    await page.reload();
+    await expect(page.getByLabel("Requirement details")).toHaveValue(new RegExp(product.galleryImages![0].src.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+    for (const design of ["0", "-1", "1.5", "99999", "invalid"]) {
+      await page.goto(`/request-quote/?product=${product.slug}&design=${design}`);
+      await expect(page.getByLabel("Requirement details")).toHaveValue("");
+    }
+    await page.goto("/request-quote/?product=unknown&design=1");
+    await expect(page.getByLabel("Product / requirement")).toHaveValue("");
+    await expect(page.getByLabel("Requirement details")).toHaveValue("");
+  }
+  const sitemap = await (await request.get("/sitemap.xml")).text();
+  expect(sitemap).toContain("https://steelwayimpex.com");
+  expect(sitemap).not.toMatch(/localhost|127\.0\.0\.1/);
+  expect(await (await request.get("/robots.txt")).text()).toContain("https://steelwayimpex.com/sitemap.xml");
+  expect(errors).toEqual([]);
 });
 
 test("inner-page accessibility, 404s and SEO endpoints", async ({
   page,
   request,
 }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
   for (const route of [
     "/products",
     ...(preview ? ["/products/ss-pvd-coated-screens-partitions"] : []),
     "/contact",
     "/request-quote",
     "/projects",
-    "/insights/preparing-a-material-enquiry",
+    "/industries",
   ]) {
     await page.goto(route);
     const results = await new AxeBuilder({ page })
@@ -526,13 +706,32 @@ test("production excludes drafts from routes, suggestions, page payloads and bro
   test.skip(preview, "Production publishing check.");
   const approved = products.filter((product) => product.approved);
   const drafts = products.filter((product) => !product.approved);
-  expect(approved.map((product) => product.slug)).toEqual([
-    "pre-engineered-steel-plants",
-  ]);
+  test.setTimeout(300000);
+  expect(approved).toHaveLength(53);
+  expect(drafts).toHaveLength(0);
+  await page.goto("/");
+  await expect(page.locator("#product-categories .product-card")).toHaveCount(3);
+  for (const product of approved.slice(0, 3)) {
+    const card = page.locator(`#product-categories [data-product-slug="${product.slug}"]`);
+    await card.scrollIntoViewIfNeeded();
+    await expect(card.getByRole("heading")).toHaveText(product.name);
+    await expect(card.locator(".draft-badge")).toHaveCount(0);
+    await expect.poll(() => card.locator("img").evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  }
+  for (const product of approved.slice(1)) {
+    await page.goto(`/products/${product.slug}/`);
+    await expect(page.locator("h1")).toHaveText(product.name);
+    await expect(page.locator(".draft-badge")).toHaveCount(0);
+    await page.goto(`/request-quote/?product=${product.slug}&design=1`);
+    await expect(page.getByLabel("Product / requirement")).toHaveValue(product.name);
+    await expect(page.getByLabel("Requirement details")).toHaveValue(/Design reference: 001/);
+  }
   for (const product of drafts)
     expect((await request.get(`/products/${product.slug}`)).status()).toBe(404);
   for (const product of approved)
     expect((await request.get(`/products/${product.slug}`)).status()).toBe(200);
+  const sitemapText = await (await request.get("/sitemap.xml")).text();
+  for (const product of approved) expect(sitemapText).toContain(`/products/${product.slug}`);
   const chunks = new Set<string>();
   for (const route of [
     "/",
@@ -560,8 +759,9 @@ test("production excludes drafts from routes, suggestions, page payloads and bro
   ).toHaveCount(1);
   for (const chunk of chunks) {
     const code = await (await request.get(chunk)).text();
-    expect(code).not.toContain(drafts[0].intro);
-    expect(code).not.toContain(drafts.at(-1)!.name);
+    for (const draft of drafts) {
+      expect(code).not.toContain(draft.intro);
+    }
   }
 });
 
@@ -649,7 +849,7 @@ test("expanded mobile product groups remain keyboard accessible", async ({
   await dialog
     .getByRole("link", { name: "Stainless Steel Bench", exact: true })
     .click();
-  await expect(page).toHaveURL(/\/products\/stainless-steel-benches$/);
+  await expect(page).toHaveURL(/\/products\/stainless-steel-benches\/?$/);
   await expect(dialog).not.toBeVisible();
 });
 
@@ -735,7 +935,7 @@ test("owner-supplied product pages expose all gallery images and complete enquir
       .locator(`[data-product-slug="${product.slug}"]`)
       .getByRole("link")
       .click();
-    await expect(page).toHaveURL(`/products/${product.slug}`);
+    await expect(page).toHaveURL(new RegExp(`/products/${product.slug}/?$`));
     await expect(page).toHaveTitle(product.seoTitle);
     await expect(page.locator("h1")).toHaveText(product.name);
     await expect(page.locator(".collection-heading")).toContainText(
